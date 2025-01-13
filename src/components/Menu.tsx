@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, Settings, History, RotateCcw } from 'lucide-react'
+import { Home, Settings, History, RotateCcw,CircleHelp } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -20,7 +20,8 @@ import {
 
 const menuItems = [
   { icon: Home, label: "Home", tooltip: "Página inicial" },
-  { icon: RotateCcw, label: "Reiniciar entrada", tooltip: "Reiniciar a entrada de dados" },
+  { icon: CircleHelp, label: "Ajuda", tooltip: "Acessar a documentação"},
+  { icon: RotateCcw, label: "Reiniciar entradas", tooltip: "Reiniciar a entrada de dados" },
   { icon: History, label: "Histórico de execução", tooltip: "Ver histórico de execuções" },
 ]
 
@@ -59,8 +60,8 @@ export function AppSidebarMenu() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <SidebarMenuButton>
-                      <Settings className="mr-2 h-4 w-4" />
-                      Configurações
+                      <Settings className="mr-2 h-4 w-4"/>
+                      <span className='text-lg'>Configurações</span>
                     </SidebarMenuButton>
                   </TooltipTrigger>
                   <TooltipContent side="right">
