@@ -3,7 +3,6 @@
 Este repositório é relativo a uma atividade final da disciplina de Sistemas Operacionais do semestre 2024.2 da Universidade Federal da Bahia (UFBA).
 Teve como objetivo principal construir um software para simulação de algoritmos de escalonamento de processos e troca de páginas.
 
----
 
 ## 🔍 Sobre o Projeto
 
@@ -15,7 +14,6 @@ O simulador suporta **N processos** que podem chegar em tempos distintos para ex
 - **Quantum do sistema:** Tempo máximo em que cada processo pode estar em execução continuamente.
 - **Sobrecarga do sistema:** O tempo necessário para alternar entre processos.
 
----
 
 ## ➕🟰 Algoritmos Implementados
 
@@ -31,9 +29,7 @@ O simulador suporta **N processos** que podem chegar em tempos distintos para ex
 - **FIFO (First-In, First-Out)**
 - **LRU (Least Recently Used)**
 
----
 
 ## 🚀 Como Executar
 
 1. **Clone este repositório:**
-2. 
