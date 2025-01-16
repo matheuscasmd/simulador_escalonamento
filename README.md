@@ -1,35 +1,50 @@
-# Algoritmos de Escalonamento de Processos e Troca de Páginas
+# React + TypeScript + Vite
 
-Este repositório é relativo a uma atividade final da disciplina de Sistemas Operacionais do semestre 2024.2 da Universidade Federal da Bahia (UFBA).
-Teve como objetivo principal construir um software para simulação de algoritmos de escalonamento de processos e troca de páginas.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+Currently, two official plugins are available:
 
-## 🔍 Sobre o Projeto
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-O simulador suporta **N processos** que podem chegar em tempos distintos para execução. Para cada processo, os seguintes dados devem ser fornecidos:
+## Expanding the ESLint configuration
 
-- **Tempo de chegada:** O instante em que o processo entra na fila.
-- **Tempo de execução:** O tempo necessário para a execução do processo.
-- **Deadline:** O prazo limite para conclusão do processo.
-- **Quantum do sistema:** Tempo máximo em que cada processo pode estar em execução continuamente.
-- **Sobrecarga do sistema:** O tempo necessário para alternar entre processos.
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
+- Configure the top-level `parserOptions` property like this:
 
-## ➕🟰 Algoritmos Implementados
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-### Escalonamento de Processos
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-- **FIFO (First-In, First-Out)**
-- **SJF (Shortest Job First)**
-- **Round Robin (RR)**
-- **EDF (Earliest deadline first)**
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
-### Troca de Páginas
-
-- **FIFO (First-In, First-Out)**
-- **LRU (Least Recently Used)**
-
-
-## 🚀 Como Executar
-
-1. **Clone este repositório:**
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```
