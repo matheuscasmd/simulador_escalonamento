@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { Menu } from './components/Menu'
 import { Config } from './components/Config'
+import { Escalonador } from './Escalonador'
 
 function App() {
   const [numeroProcessos,setNumeroProcessos] = useState<number>()
@@ -20,21 +21,22 @@ function App() {
     setSobrecarga(Number(value))
   }
   
+  const processos = [
+    { id: 1, tempoChegada: 0, tempoCompletar: 10, tamanho: 5, deadline: 20 },
+    { id: 2, tempoChegada: 2, tempoCompletar: 8, tamanho: 3, deadline: 18 },
+    { id: 3, tempoChegada: 4, tempoCompletar: 12, tamanho: 7, deadline: 30 },
+    { id: 4, tempoChegada: 6, tempoCompletar: 6, tamanho: 4, deadline: 25 },
+  ];
+
+  const algoritmoProcessos = "FIFO";
+  const algoritmoPaginas = "FIFO";
 
   return (
     <div className='fullscreen-rectangle '>
     <div className='flex flex-row w-screen'>
       <Menu/>
       <div className='flex flex-row items-center justify-center w-full'>
-      <Config
-      processos={numeroProcessos}
-      quantum={quantum}
-      sobrecarga={sobrecarga}
-      setProcessos={handleProcessosChange}
-      setQuantum={handleQuantumChange}
-      setSobrecarga={handleSobrecargaChange}
-      variante={"configurado"}
-      />
+      <Escalonador processos={processos} algoritmoPaginas={algoritmoPaginas} algoritmoProcessos={algoritmoProcessos}></Escalonador>
       </div>
     </div>
     </div>
