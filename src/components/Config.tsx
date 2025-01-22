@@ -17,7 +17,7 @@ type ConfigProps = {
 export const Config = (config : ConfigProps) => {
 
     return (
-      <Card className="flex flex-col gap-4 px-4 py-8 h-full items-center mx-auto w-fit shadow-lg my-24 min-w-[500px]">
+      <Card className="flex flex-col gap-4 px-4 py-8 h-full items-center mx-auto w-fit shadow-lg my-24 min-w-[500px] bg-sidebar z-10">
       <h1 className="text-4xl mb-40">Métricas</h1>
       <Label className="text-lg">Quantidade de processos:</Label>
         <Input

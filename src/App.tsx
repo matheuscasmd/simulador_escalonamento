@@ -22,6 +22,7 @@ function App() {
   
 
   return (
+    <div className='fullscreen-rectangle '>
     <div className='flex flex-row w-screen'>
       <Menu/>
       <div className='flex flex-row items-center justify-center w-full'>
@@ -35,6 +36,7 @@ function App() {
       variante={"configurado"}
       />
       </div>
+    </div>
     </div>
   )
 }
@@ -50,3 +52,9 @@ export default App
 //   quantum : number
 //   sobrecarga  : number
 // }
+
+
+
+
+
+

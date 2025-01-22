@@ -27,24 +27,25 @@ const menuItems = [
 
 export function Menu() {
   return (
-    <SidebarProvider className='w-fit pt-4'>
+    <SidebarProvider className='w-fit pt-4 text-white'>
       <Sidebar className='max-w-21'>
-        <SidebarHeader>
-          <h2 className="px-4 text-2xl font-semibold tracking-tight">SOSimulador</h2>
+        <SidebarHeader className='w-full flex flex-row items-center text-left justify-start'>
+          <img src="src\assets\Group.png" alt="logo" className='w-16'/>
+          <span className="text-5xl font-semibold tracking-tight">SO<span className='text-lg'>Simulator</span></span>
         </SidebarHeader>
         <SidebarContent>
           <TooltipProvider delayDuration={0}>
-            <SidebarMenu>
+            <SidebarMenu className='gap-4'>
               {menuItems.map((item, index) => (
-                <SidebarMenuItem key={index}>
+                <SidebarMenuItem key={index} className='bg-sidebarItem'>
                   <Tooltip>
-                    <TooltipTrigger asChild>
+                    <TooltipTrigger asChild >
                       <SidebarMenuButton className='text-lg'>
                         <item.icon className="mr-2 h-4 w-4" />
                         {item.label}
                       </SidebarMenuButton>
                     </TooltipTrigger>
-                    <TooltipContent side="right">
+                    <TooltipContent side="right" className='bg-sidebar'>
                       <p>{item.tooltip}</p>
                     </TooltipContent>
                   </Tooltip>
@@ -56,15 +57,15 @@ export function Menu() {
         <SidebarFooter>
           <TooltipProvider delayDuration={0}>
             <SidebarMenu>
-              <SidebarMenuItem>
+              <SidebarMenuItem className='bg-sidebarItem w-full'>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <SidebarMenuButton>
+                    <SidebarMenuButton >
                       <Settings className="mr-2 h-4 w-4"/>
-                      <span className='text-lg'>Configurações</span>
+                      <span className='text-lg '>Configurações</span>
                     </SidebarMenuButton>
                   </TooltipTrigger>
-                  <TooltipContent side="right">
+                  <TooltipContent side="right" className='bg-sidebar'>
                     <p>Ajustar configurações</p>
                   </TooltipContent>
                 </Tooltip>

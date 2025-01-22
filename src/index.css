@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-color: #1c1c1c;
+  --secondary-bg: #2c2c2c;
+  --primary-green: #00ff00;
+  --secondary-green: #38ff38;
+  --text-color: #ffffff;
+  --sidebar-background: 0, 0%, 17%;
+  --sidebar-items-background: 0, 0%, 22%;
+  background-image: url('./assets/background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.fullscreen-rectangle {
+  top: 0;
+  left: 0;
+  background-color: #181818; /* Cor do retângulo */
+  opacity: 0.97; /* Opacidade de 97% */
+}
