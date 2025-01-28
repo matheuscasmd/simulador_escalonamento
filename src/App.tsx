@@ -1,8 +1,18 @@
 import { useState } from 'react'
 import './App.css'
 import { Menu } from './components/Menu'
-import { Config } from './components/Config'
-import { Escalonador } from './Escalonador'
+import { EsteiraExecucao } from './components/EsteiraExecucao'
+
+
+type Estado = "ram" | "execucao" | "sobrecarga" | "disco" | "ausente" | "finalizado"
+const estados: Estado[] = ["ram", "execucao", "sobrecarga", "disco", "ausente", "finalizado"];
+
+const testeAleatorio: Estado[][] = 
+  Array.from({ length: 4 }, () =>
+    Array.from({ length: 100 }, () =>
+      estados[Math.floor(Math.random() * estados.length)] // Gera um estado aleatório garantido do tipo Estado
+    )
+  )
 
 function App() {
   const [numeroProcessos,setNumeroProcessos] = useState<number>()
@@ -30,13 +40,14 @@ function App() {
 
   const algoritmoProcessos = "FIFO";
   const algoritmoPaginas = "FIFO";
-
+  
   return (
-    <div className='fullscreen-rectangle '>
+    <div className='w-full h-screen overflow-x-hidden fullscreen-rectangle'>
     <div className='flex flex-row w-screen'>
       <Menu/>
-      <div className='flex flex-row items-center justify-center w-full'>
-      <Escalonador processos={processos} algoritmoPaginas={algoritmoPaginas} algoritmoProcessos={algoritmoProcessos}></Escalonador>
+      <div className='flex flex-col items-center justify-center w-full'>
+      {/* <Escalonador processos={processos} algoritmoPaginas={algoritmoPaginas} algoritmoProcessos={algoritmoProcessos}></Escalonador> */}
+      <EsteiraExecucao lista={testeAleatorio  }></EsteiraExecucao>
       </div>
     </div>
     </div>

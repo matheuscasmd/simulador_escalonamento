@@ -27,13 +27,13 @@ const menuItems = [
 
 export function Menu() {
   return (
-    <SidebarProvider className='w-fit pt-4 text-white'>
-      <Sidebar className='max-w-21'>
-        <SidebarHeader className='w-full flex flex-row items-center text-left justify-start'>
+    <SidebarProvider className='w-fit pt-4 text-white '>
+      <Sidebar className='max-w-21 border-none bg-white'>
+        <SidebarHeader className='w-full flex flex-row items-center text-left justify-start bg-sidebarItem'>
           <img src="src\assets\Group.png" alt="logo" className='w-16'/>
           <span className="text-5xl font-semibold tracking-tight">SO<span className='text-lg'>Simulator</span></span>
         </SidebarHeader>
-        <SidebarContent>
+        <SidebarContent className='bg-sidebarItem'>
           <TooltipProvider delayDuration={0}>
             <SidebarMenu className='gap-4'>
               {menuItems.map((item, index) => (
@@ -41,7 +41,7 @@ export function Menu() {
                   <Tooltip>
                     <TooltipTrigger asChild >
                       <SidebarMenuButton className='text-lg'>
-                        <item.icon className="mr-2 h-4 w-4" />
+                        <item.icon className="mr-2 size=- stroke-green-600" />
                         {item.label}
                       </SidebarMenuButton>
                     </TooltipTrigger>
@@ -54,25 +54,6 @@ export function Menu() {
             </SidebarMenu>
           </TooltipProvider>
         </SidebarContent>
-        <SidebarFooter>
-          <TooltipProvider delayDuration={0}>
-            <SidebarMenu>
-              <SidebarMenuItem className='bg-sidebarItem w-full'>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <SidebarMenuButton >
-                      <Settings className="mr-2 h-4 w-4"/>
-                      <span className='text-lg '>Configurações</span>
-                    </SidebarMenuButton>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" className='bg-sidebar'>
-                    <p>Ajustar configurações</p>
-                  </TooltipContent>
-                </Tooltip>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </TooltipProvider>
-        </SidebarFooter>
       </Sidebar>
     </SidebarProvider>
   )

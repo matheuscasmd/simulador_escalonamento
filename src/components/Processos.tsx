@@ -1,163 +1,187 @@
-"use client";
-import React, { useState } from "react";
-import { Card } from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Button } from "./ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "./ui/select";
-import { X } from "lucide-react";
+import { useState } from "react"
+import { Progress } from "@/components/ui/progress"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel"
 
-type ProcessoInput = {
-  placeholder: string;
-  label: string;
-  id: string;
-};
+interface Processo {
+  id: number
+  tempoChegada: number
+  tempoCompletar: number
+  tamanho: number
+  deadline: number
+}
 
-type Preemptivo = "RR" | "EDF";
-type NaoPreemptivo = "FIFO" | "SJF";
-
-const infoProcesso: ProcessoInput[] = [
+const infoProcesso: { placeholder: string; label: keyof Processo; id: string }[] = [
   { placeholder: "Tempo de chegada", label: "tempoChegada", id: "tempoChegada" },
-  { placeholder: "Tempo de execução", label: "tempoExecucao", id: "tempoExecucao" },
+  { placeholder: "Tempo de execução", label: "tempoCompletar", id: "tempoCompletar" },
+  { placeholder: "Tamanho", label: "tamanho", id: "tamanho" },
   { placeholder: "Deadline", label: "deadline", id: "deadline" },
-];
+]
 
 export function Processos() {
-  const [numeroProcessos,setNumeroProcessos] = useState<string>()
-  const [processos, setProcessos] = useState<Record<string, string>[]>([]);
-  const [currentProcesso, setCurrentProcesso] = useState<Record<string, string>>(
-    {}
-  );
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [algoritmo, setAlgoritmo] = useState<Preemptivo | NaoPreemptivo | null>(null);
-  const [quantum, setQuantum] = useState<string | null>(null);
-  const [sobrecarga, setSobrecarga] = useState<string | null>(null);
+  const [processos, setProcessos] = useState<Processo[]>([])
+  const [currentProcesso, setCurrentProcesso] = useState<Partial<Processo>>({})
+  const [maxProcessos, setMaxProcessos] = useState<number>(10)
 
   const handleChange = (id: string, value: string) => {
-    setCurrentProcesso((prev) => ({ ...prev, [id]: value }));
-  };
+    setCurrentProcesso((prev) => ({ ...prev, [id]: Number(value) }))
+  }
 
-  const next = () => {
-    if (Object.keys(currentProcesso).length.toString() === numeroProcessos) {
-      setProcessos((prev) => [...prev, currentProcesso]);
-      setCurrentProcesso({});
-      setCurrentIndex((prev) => prev + 1);
+  const addProcesso = () => {
+    if (Object.keys(currentProcesso).length === infoProcesso.length && processos.length < maxProcessos) {
+      const newProcesso: Processo = {
+        id: processos.length + 1,
+        tempoChegada: currentProcesso.tempoChegada || 0,
+        tempoCompletar: currentProcesso.tempoCompletar || 0,
+        tamanho: currentProcesso.tamanho || 0,
+        deadline: currentProcesso.deadline || 0,
+      }
+      setProcessos((prev) => [...prev, newProcesso])
+      setCurrentProcesso({})
     }
-  };
+  }
+
   const reset = () => {
-    setAlgoritmo(null)
-    setQuantum(null)
-    setSobrecarga(null)
     setProcessos([])
     setCurrentProcesso({})
   }
-  const confirm = () => {
-    if (Object.keys(currentProcesso).length === infoProcesso.length) {
-      setProcessos((prev) => [...prev, currentProcesso]);
-      alert("Todos os processos foram salvos com sucesso!");
-    }
-  };
 
   const renderInputs = () => {
     return infoProcesso.map((item) => (
-      <div key={item.id} style={{ marginBottom: "1rem" }}>
-        <Label htmlFor={item.id}>{item.placeholder}</Label>
+      <div key={item.id} className="mb-4">
+        <Label htmlFor={item.id} className="block mb-2 text-white">
+          {item.placeholder}
+        </Label>
         <Input
           id={item.id}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
           placeholder={item.placeholder}
-          value={currentProcesso[item.id] || ""}
-          onChange={(e) => handleChange(item.id, e.target.value)}
+          value={currentProcesso[item.label] || ""}
+          onChange={(e) => handleChange(item.label, e.target.value)}
+          className="w-full px-3 py-2 bg-muted border-border text-white placeholder:text-gray-500 focus:ring-primary focus:border-primary"
         />
       </div>
-    ));
-  };
+    ))
+  }
 
   const renderProcessos = () => {
-    return processos.map((processo, index) => (
-      <Card key={index} className="p-4 text-left h-fit text-gray-600">
-        <h3 className="text-lg">Processo {index + 1}</h3>
-        {infoProcesso.map((item) => (
-          <p key={item.id}>
-            <b className="text-black">{item.placeholder}:</b> {processo[item.id]}
-          </p>
-        ))}
-      </Card>
-    ));
-  };
+    if (processos.length < 3) {
+      return processos.map((processo) => (
+        <Card key={processo.id} className="w-fit mb-4 bg-muted border-border">
+          <CardHeader>
+            <CardTitle className="text-primary">Processo {processo.id}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {infoProcesso.map((item) => (
+              <p key={item.id} className="mb-2 text-white">
+                <span className="font-semibold text-primary">{item.placeholder}:</span> {processo[item.label]}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
+      ))
+    }
+    return (
+      <Carousel className="w-full max-w-xs mx-auto">
+        <CarouselContent>
+          {processos.map((processo) => (
+            <CarouselItem key={processo.id}>
+              <Card className="w-full bg-muted border-border">
+                <CardHeader>
+                  <CardTitle className="text-primary">Processo {processo.id}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {infoProcesso.map((item) => (
+                    <p key={item.id} className="mb-2 text-white">
+                      <span className="font-semibold text-primary">{item.placeholder}:</span> {processo[item.label]}
+                    </p>
+                  ))}
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    )
+    
+  }
 
-  return algoritmo && (algoritmo !== "RR" || (quantum && sobrecarga)) ? (
-    <Card className="flex flex-col md:flex-row gap-8 p-6 mx-auto w-[60%] shadow-lg mt-28">
-      <X className="hover:cursor-pointer align-bottom" onClick={()=> reset()}/>
-      <span className="text-lg">
-        Algoritmo selecionado: <b className="text-black">{algoritmo}</b>
-        {algoritmo === "RR" && (
-          <>
-            <br />
-            <b>Quantum:</b> {quantum}
-            <br />
-            <b>Sobrecarga:</b> {sobrecarga}
-          </>
-        )}
-      </span>
-      {renderProcessos()}
-      <Card className="p-4 w-fit text-gray-600">
-        <h3 className="text-lg pb-2">Processo: {currentIndex + 1}</h3>
-        {renderInputs()}
-        <Button
-          onClick={currentIndex < 2 ? next : confirm}
-          className=""
-        >
-          {currentIndex < 2 ? "Próximo" : "Confirmar"}
-        </Button>
-      </Card>
-    </Card>
-  ) : (
-    <Card className="flex flex-col gap-4 p-6 mx-auto w-[60%] shadow-lg mt-28">
-      <h1 className="text-4xl">Escalonamento de processos</h1>
-      <Label className="text-lg pb-2">Selecione o Algoritmo</Label>
-      <Select onValueChange={(value) => setAlgoritmo(value as Preemptivo | NaoPreemptivo)}>
-        <SelectTrigger>
-          <SelectValue placeholder="Escolha um algoritmo" />
-        </SelectTrigger>
-        <SelectContent className="bg-white">
-          <SelectItem value="FIFO">FIFO</SelectItem>
-          <SelectItem value="SJF">SJF</SelectItem>
-          <SelectItem value="RR">Round Robin</SelectItem>
-          <SelectItem value="EDF">EDF</SelectItem>
-        </SelectContent>
-      </Select>
-      <Label className="text-lg pb-2">Quantidade de processos:</Label>
-        <Input
-        value={numeroProcessos || ""}
-        onChange={(e) => setNumeroProcessos(e.target.value)}
-        placeholder="Informe o número de processos"
-        className="mb-4"
-        />
-      {algoritmo === "RR" && (
-        <div>
-          <Label>Quantum</Label>
-          <Input
-            value={quantum || ""}
-            onChange={(e) => setQuantum(e.target.value)}
-            placeholder="Informe o Quantum"
-            className="mb-4"
-          />
-          <Label>Tempo de Sobrecarga</Label>
-          <Input
-            value={sobrecarga || ""}
-            onChange={(e) => setSobrecarga(e.target.value)}
-            placeholder="Informe o Tempo de Sobrecarga"
-            className="mb-4"
-          />
-          
+  const progressPercentage = (processos.length / maxProcessos) * 100
+
+  return (
+    <div className="min-h-screen bg-sidebar relative z-40 w-full">
+      <div className=" inset-0 circuit-background" />
+      <div className="mx-auto p-6 pt-20 z-10">
+        <div className="flex flex-wrap justify-around gap-8">
+          <div className="w-full flex flex-row gap-8 h-fit items-start justify-center">
+            <div className="h-max w-max space-y-4">
+            <Card className="bg-muted border-border">
+              <CardHeader>
+                <CardTitle className="text-primary">Configuração</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4">
+                  <Label htmlFor="maxProcessos" className="block mb-2 text-white">
+                    Número máximo de processos
+                  </Label>
+                  <Input
+                    id="maxProcessos"
+                    type="number"
+                    min="1"
+                    value={maxProcessos}
+                    onChange={(e) => setMaxProcessos(Number(e.target.value))}
+                    className="w-full px-3 py-2 bg-muted border-border text-white placeholder:text-gray-500 focus:ring-primary focus:border-primary"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="bg-muted border-border">
+              <CardHeader>
+                <CardTitle className="text-primary">Total</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Progress value={progressPercentage} className="w-full bg-muted-foreground/20" />
+                <p className="mt-2 text-center text-white">
+                  {processos.length} de {maxProcessos} processos adicionados
+                </p>
+              </CardContent>
+            </Card>
+            </div>
+            
+            
+            <Card className="bg-muted border-border">
+              <CardHeader>
+                <CardTitle className="text-primary">Adicionar Processo</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {renderInputs()}
+                <div className="space-x-4">
+                  <Button
+                    onClick={addProcesso}
+                    disabled={processos.length >= maxProcessos}
+                    className="bg-primary text-black hover:bg-primary/90"
+                  >
+                    Adicionar Processo
+                  </Button>
+                  <Button onClick={reset} variant="outline" className="border-primary text-primary hover:scale-105">
+                    Resetar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      )}
-    </Card>
-  );
+      </div>
+      <div className="flex flex-wrap gap-4 w-full justify-center">
+            {renderProcessos()}
+          </div>
+    </div>
+  )
 }

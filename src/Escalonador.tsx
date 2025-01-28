@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Card } from "./components/ui/card";
 
 type algoritmoProcessos = "FIFO" | "SJF" | "RR" | "EDF";
 type algoritmoPaginas = "FIFO" | "LRU";
@@ -31,6 +32,8 @@ export const Escalonador = ({
   const [RAM, setRAM] = useState<Celula[]>(alocarMemoria(50));
   const [disco, setDisco] = useState<Celula[]>(alocarMemoria(200));
   const [processosRAM, setProcessosRAM] = useState<Processo[]>([]);
+  const [prioridadePreemptivo,setPrioridadePreemptivo] = useState();
+  const [paginasLivres,setPaginasLivres] =  useState(50)
 
   function alocarMemoria(tamanho: number): Celula[] {
     return Array.from({ length: tamanho }, () => ({
@@ -49,6 +52,15 @@ export const Escalonador = ({
       }
     }
     return false;
+  }
+
+  function moverProcessoDisco(processo: Processo){
+    if(processo.posicaoInicialRAM){
+      for(let i = processo.posicaoInicialRAM; i <processo.posicaoInicialRAM + processo.tamanho; i++){
+        RAM[i] = {estado : "livre", processoId : undefined}
+      }
+    }
+    
   }
   
 
@@ -109,7 +121,7 @@ export const Escalonador = ({
 
   // Lógica de renderização
   return (
-    <div>
+    <Card className="bg-sidebar z-30 backdrop-brightness-0 text-white border-gray-800/85">
       <h1>Simulação de Memória e Escalonamento de Processos</h1>
       <h2>RAM (50 Páginas)</h2>
       <table className="tabela-memoria bg-white">
@@ -133,6 +145,6 @@ export const Escalonador = ({
 
       <button onClick={() => escalonarProcessos()}>Escalonar Processos</button>
       <button onClick={() => escalonarPaginas()}>Escalonar Páginas</button>
-    </div>
+    </Card>
   );
 };
