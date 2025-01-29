@@ -144,6 +144,80 @@ export const Escalonador = ({
   }
 
 
+  // Escalonamento de Processos:
+
+  //Round-Robin:
+  const INF:number = 1e5;
+  function Round_Robin(processes_input: Process[], quantum: number, preemptive: number) {
+    let processes = processes_input.map(p => ({ ...p }));
+    let n = processes.length;
+    let current_time = 0;
+    let totalTurnaroundTime = 0;
+    let completedProcesses: Process[] = [];
+    let counter: number = 0;
+
+    let readyQueue: number[] = [];
+    let output: number[][] = [];
+
+    output = Array.from({ length: n }, () => Array(INF).fill(-1));
+
+    while (counter < n && processes[counter].arrival <= current_time) {
+        readyQueue.push(counter);
+        counter++;
+    }
+
+    while (completedProcesses.length < n) {
+        let i = readyQueue.shift();
+        if (i === undefined) {
+            break;
+        }
+        if (!processes[i].completed) {
+            if (processes[i].time <= quantum && processes[i].time > 0) {
+                for (let t = current_time; t < current_time + processes[i].time; t++) {
+                    output[i][t] = 1;
+                }
+                current_time += processes[i].time;
+
+                processes[i].time = 0;
+                processes[i].completed = true;
+                completedProcesses.push(processes[i]);
+                totalTurnaroundTime += current_time - processes[i].arrival;
+            } else if (processes[i].time > 0) {
+                for (let t = current_time; t < current_time + quantum; t++) {
+                    output[i][t] = 1;
+                }
+                processes[i].time -= quantum;
+                current_time += quantum;
+                for (let t = current_time; t < current_time + preemptive; t++) {
+                    output[i][t] = 2;
+                }
+                current_time += preemptive;
+            }
+        }
+        while (counter < n && processes[counter].arrival <= current_time) {
+            readyQueue.push(counter);
+            counter++;
+        }
+        if (processes[i].time > 0) {
+            readyQueue.push(i);
+        }
+
+        for (let j = 0; j < n; j++) {
+            for (let t = processes[j].time; t < current_time; t++) {
+                if (output[j][t] === -1) {
+                    output[j][t] = 5;
+                }
+            }
+        }
+    }
+    output = output.map(row => row.filter(cell => cell !== -1));
+    for (let i = 0; i < output.length; i++) {
+        console.log(`Index ${i}: [${output[i].join(", ")}]`);
+    }
+    console.log("Average Turnaround Time: " + (totalTurnaroundTime / n).toFixed(2));
+}
+
+
   function escalonarProcessos() {
     switch (algoritmoProcessos) {
       case "FIFO":
