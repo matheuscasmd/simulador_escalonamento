@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 
 type MemoriaSlot = {
@@ -8,10 +8,35 @@ type MemoriaSlot = {
   status: "livre" | "ocupado" | "execucao"
 }
 
-export function MemoriaCard() {
-  const [ramSlots, setRamSlots] = useState<MemoriaSlot[]>(Array(50).fill({ id: null, status: "livre" }))
+type MemoriaCardProps = {
+  ram: number[]
+  disco: number[]
+}
 
+export function MemoriaCard({ ram, disco }: MemoriaCardProps) {
+  const [ramSlots, setRamSlots] = useState<MemoriaSlot[]>(Array(50).fill({ id: null, status: "livre" }))
   const [discoSlots, setDiscoSlots] = useState<MemoriaSlot[]>(Array(150).fill({ id: null, status: "livre" }))
+
+  useEffect(() => {
+    if(ram.length != 0){
+      
+    }
+    setRamSlots(
+      ram.map((processId, index) => ({
+        id: processId,
+        status: processId === null ? "livre" : index === ram.findIndex(p => p !== null) ? "execucao" : "ocupado",
+      }))
+    )
+  }, [ram])
+
+  useEffect(() => {
+    setDiscoSlots(
+      disco.map((processId) => ({
+        id: processId,
+        status: processId === null ? "livre" : "ocupado",
+      }))
+    )
+  }, [disco])
 
   const renderSlots = (slots: MemoriaSlot[], isRam: boolean) => (
     <div className="flex flex-wrap gap-[2px]">
@@ -53,4 +78,3 @@ export function MemoriaCard() {
     </Card>
   )
 }
-

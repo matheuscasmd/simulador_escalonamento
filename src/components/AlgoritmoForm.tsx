@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-interface ConfigData {
+interface ExecucaoData {
   sobrecarga: number
   quantum: number
   algoritmoProcessos: string
@@ -16,7 +16,7 @@ interface ConfigData {
 
 export default function ConfigForm() {
   const [isEditing, setIsEditing] = useState(true)
-  const [config, setConfig] = useState<ConfigData>({
+  const [config, setConfig] = useState<ExecucaoData>({
     sobrecarga: 0,
     quantum: 0,
     algoritmoProcessos: "FIFO",
