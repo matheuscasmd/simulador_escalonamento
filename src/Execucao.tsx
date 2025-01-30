@@ -1,5 +1,9 @@
 import './App.css'
+import AlgoritmoForm from './components/AlgoritmoForm';
+import { DiscoCard } from './components/CardDISCO';
+import { RAMCard } from './components/CardRam';
 import { EsteiraExecucao } from './components/EsteiraExecucao'
+import { MemoriaCard } from './components/Memoria';
 
 
 type Estado = "ram" | "execucao" | "sobrecarga" | "disco" | "ausente" | "finalizado"
@@ -14,7 +18,11 @@ const testeAleatorio: Estado[][] =
 
 function Execucao() {
   return (
-      <div className='flex flex-col items-center justify-center w-full'>
+      <div className='flex flex-col items-center justify-center w-full pr-80 pl-10'>
+      <div className='flex flex-row w-full items-start pb-4 '>
+      <AlgoritmoForm/>
+      <MemoriaCard/>
+      </div>      
       <EsteiraExecucao lista={testeAleatorio}></EsteiraExecucao>
       </div>
   )

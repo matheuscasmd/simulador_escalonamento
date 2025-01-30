@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import App from "./App";
 import Execucao from "./Execucao";
-import { Processos } from "./components/Processos";
+import { Processos } from "./Processos";
 import { Welcome } from "./Home";
+import AlgoritmoForm from "./components/AlgoritmoForm";
 
 const AppRoutes = () => {
   return (

@@ -40,7 +40,7 @@ export function EsteiraExecucao({ lista }: EsteiraExecucaoProps) {
   }
 
   return (
-    <Card className="bg-[#1A1A1A] border border-[#333333] rounded-lg flex flex-col space-y-4 p-6 w-1/2 overflow-x-auto">
+    <Card className="bg-[#1A1A1A] border border-[#333333] rounded-lg flex flex-col space-y-4 p-6 w-full mx-40 overflow-x-auto">
       {/* Seletor de Velocidade */}
       <div className="flex items-center gap-4 sticky left-0">
         <span className="text-[#00FF00] text-lg font-medium">Velocidade: </span>

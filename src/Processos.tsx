@@ -151,8 +151,8 @@ export function Processos() {
                 <p className="mt-2 text-center text-white">
                   {processos.length} de {maxProcessos} processos adicionados
                 </p>
-                <div className="flex justify-end">' '
-                <Button disabled={maxProcessos != processos.length} onClick={saveAndGoToAlgorithms}>Ir para algoritmos</Button>
+                <div className="flex justify-end">
+                <Button disabled={maxProcessos != processos.length} onClick={saveAndGoToAlgorithms} className="mt-2">Ir para algoritmos</Button>
                 </div>
               </CardContent>
             </Card>
