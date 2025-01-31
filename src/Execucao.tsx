@@ -20,7 +20,7 @@ function Execucao() {
   const [estadosExecucao, setEstadosExecucao] = useState<IEstado[][]>(
     [["ausente","ausente","ausente","ausente"],["ausente","ausente","ausente","ausente"]]
   )
-
+  
   useEffect(() => {
     const processosSalvos = localStorage.getItem("processos");
     if (processosSalvos) {
@@ -32,7 +32,6 @@ function Execucao() {
   useEffect(() => {
     let tempo = 0;
     const processosPendentes = [...processos];
-    console.log(processos)
     const executarEscalonador = () => {
       while (processosPendentes.some(p => p.estado != "finalizado")) {
         const processosChegando = processosPendentes.filter(p => p.tempoChegada === tempo && p.estado != "finalizado");
@@ -42,31 +41,24 @@ function Execucao() {
             scheduler.adicionarProcesso(processo);
             processo.estado = "ram";
           } else {
-            setDisco(discoAtual => {
-              const novoDisco = [...discoAtual];
-              const indicesLivres = novoDisco.map((v, i) => v === null ? i : null).filter(i => i !== null);
-              if (indicesLivres.length >= processo.tamanho) {
-                indicesLivres.slice(0, processo.tamanho).forEach(idx => novoDisco[idx] = processo.id);
-              }
-              processo.estado = "disco"
-              tempo++;
-              return novoDisco;
-            });
+            //tirar algum até caber
           }
+
         }
-  
-        const finalizado = scheduler.executarPasso();
-        if (finalizado) {
-          memoryManager.liberarPaginas(finalizado);
-          setRam(memoryManager.pages.slice() as number[]);
+        //todos os processos que chegaram em t = tempo estão na RAM
+        if(scheduler.preemptivo){
+          const execucao = scheduler.executarPasso();
+
+
+          tempo += quantum;
+          tempo += sobrecarga;
         }
-        const estadosAtuais = scheduler.retornarEstados()
-        setEstadosExecucao(estadosExecucao => 
-          estadosExecucao.map((row, rowIndex) => 
-            rowIndex === tempo ? estadosAtuais : row
-          )
-        );
-        tempo++;
+        else {
+          const execucao = scheduler.executarPasso();
+
+          tempo += processo.tempo
+        }
+
       }
     };
   

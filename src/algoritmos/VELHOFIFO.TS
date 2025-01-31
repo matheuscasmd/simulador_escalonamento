@@ -7,7 +7,7 @@ interface Process {
     turnaround?: number;
 }
 
-function fifo(processes_input: Process[]): { output: number[][], average_turnaround: number } {
+export function FIFOVELHO(processes_input: Process[]): { output: number[][], average_turnaround: number } {
     let processes = processes_input.map(p => ({ ...p }));
     let n = processes.length;
     let completed = 0;
