@@ -1,8 +1,8 @@
 import { IProcesso } from "../IProcesso";
 
 export class SJFScheduler {
-    private fila: IProcesso[] = [];
-    private processoAtual: IProcesso | null = null;
+  public fila: IProcesso[] = [];
+  public processoAtual: IProcesso | null = null;
   
     adicionarProcesso(processo: IProcesso) {
       this.fila.push(processo);
@@ -17,7 +17,7 @@ export class SJFScheduler {
         this.processoAtual.tempo--;
         if (this.processoAtual.tempo <= 0) {
           const finalizado = this.processoAtual;
-          finalizado.finalizado = true;
+          this.processoAtual.estado = "finalizado";
           this.processoAtual = null;
           return finalizado;
         }

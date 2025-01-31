@@ -1,76 +1,44 @@
 import { IProcesso } from "../IProcesso";
 
+export class RoundRobinScheduler {
+    public fila: IProcesso[] = [];
+    public IProcessoAtual: IProcesso | null = null;
+    public quantumRestante: number = 0;
+    public quantum: number;
+    public sobrecarga: number;
 
-function Round_Robin(IProcessoes_input:IProcesso[],quantum:number,preemptive:number){
-    let IProcessoes = IProcessoes_input.map(p => ({ ...p }));
-    let n = IProcessoes.length;
-    let current_tempo = 0;
-    let totalTurnaroundtempo = 0;
-    let finalizadoIProcessoes: IProcesso[] = [];
-    let counter:number = 0;
-    
-    let readyQueue: number[] = [];
-    let output:number[][] = [];
-    
-    output = Array.from({ length: n }, () => Array(Infinity).fill(-1));
-    
-    while (counter < n && IProcessoes[counter].tempoChegada <= current_tempo) {
-        readyQueue.push(counter);
-        counter++;
+    constructor(quantum: number, sobrecarga: number) {
+        this.quantum = quantum;
+        this.sobrecarga = sobrecarga;
     }
-    
-    
-    while(finalizadoIProcessoes.length < n){
-      let i = readyQueue.shift();
-       if(i === undefined){
-          break;
-       }
-      if(!IProcessoes[i].finalizado){
-        if(IProcessoes[i].tempo <= quantum && IProcessoes[i].tempo > 0){
-            for (let t = current_tempo; t < current_tempo + IProcessoes[i].tempo; t++) {
-                output[i][t] = 1; 
-            }
-            current_tempo += IProcessoes[i].tempo;
-    
-            IProcessoes[i].tempo = 0;
-            IProcessoes[i].finalizado = true;
-            finalizadoIProcessoes.push(IProcessoes[i]);
-            totalTurnaroundtempo += current_tempo - IProcessoes[i].tempoChegada; 
+
+    adicionarProcesso(IProcesso: IProcesso) {
+        this.fila.push({ ...IProcesso });
+    }
+
+    executarPasso(): IProcesso | null {
+        if (!this.IProcessoAtual && this.fila.length > 0) {
+            this.IProcessoAtual = this.fila.shift()!;
+            this.quantumRestante = this.quantum;
         }
-        else if(IProcessoes[i].tempo > 0){
-            for (let t = current_tempo; t < current_tempo + quantum; t++) {
-                output[i][t] = 1;
+
+        if (this.IProcessoAtual) {
+            this.IProcessoAtual.tempo--;
+            this.quantumRestante--;
+
+            if (this.IProcessoAtual.tempo <= 0) {
+                const finalizado = this.IProcessoAtual;
+                finalizado.finalizado = true;
+                this.IProcessoAtual = null;
+                return finalizado;
             }
-            IProcessoes[i].tempo -= quantum;
-            current_tempo +=quantum;
-            for (let t = current_tempo; t < current_tempo + preemptive; t++) {
-                output[i][t] = 2; 
+
+            if (this.quantumRestante <= 0) {
+                this.fila.push(this.IProcessoAtual);
+                this.IProcessoAtual = null;
             }
-            current_tempo += preemptive;
-    
-            
         }
-     }
-     while (counter < n && IProcessoes[counter].tempoChegada <= current_tempo) {
-        readyQueue.push(counter);
-        counter++;
+
+        return null;
     }
-    if(IProcessoes[i].tempo> 0) {
-        readyQueue.push(i);
-    }
-    
-     for (let j = 0; j < n; j++) {
-            for (let t = IProcessoes[j].tempo; t < current_tempo; t++) {
-            if(output[j][t] === -1){
-                output[j][t] = 5;
-             }
-        }
-    }
-    }
-    output = output.map(row => row.filter(cell => cell !== -1));
-    for (let i = 0; i < output.length; i++) {
-    console.log(Index ${i}: [${output[i].join(", ")}]);
-    }
-    console.log("Average Turnaround tempo: " + (totalTurnaroundtempo / n).toFixed(2));
-    
-    }
+}

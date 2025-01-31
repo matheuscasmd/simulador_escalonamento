@@ -72,7 +72,7 @@ export function Welcome() {
 
         <motion.div variants={itemVariants}>
           <Button
-            onClick={() => router("/processos")}
+            onClick={() => router("/app/processos",{replace : true})}
             className="mt-8 bg-white/10 hover:bg-white/20 text-white border border-[#00FF00]/50 hover:border-[#00FF00] transition-all duration-300 group"
           >
             Conhecer

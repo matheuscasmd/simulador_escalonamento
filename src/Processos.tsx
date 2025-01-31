@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { IProcesso } from "./algoritmos/IProcesso";
+import { useNavigate } from "react-router-dom";
 
 
-const infoProcesso: { placeholder: string; label: keyof Omit<IProcesso, "id" | "finalizado">; id: string }[] = [
+const infoProcesso: { placeholder: string; label: keyof Omit<IProcesso, "id" | "estado" | "paginasAlocadas">; id: string }[] = [
   { placeholder: "Tempo de chegada", label: "tempoChegada", id: "tempoChegada" },
   { placeholder: "Tempo de execução", label: "tempo", id: "tempoCompletar" },
   { placeholder: "Tamanho", label: "tamanho", id: "tamanho" },
@@ -19,13 +20,15 @@ export function Processos() {
   const [currentProcesso, setCurrentProcesso] = useState<Partial<IProcesso>>({});
   const [maxProcessos, setMaxProcessos] = useState<number>(10);
 
+  const router = useNavigate()
+
   const handleChange = (id: string, value: string) => {
     setCurrentProcesso((prev) => ({ ...prev, [id]: value === "" ? "" : Number(value) }));
   };
 
   const saveAndGoToAlgorithms = () => {
     localStorage.setItem("processos", JSON.stringify(processos));
-    console.log("Navegar para algoritmos");
+    router("/app/execucao",{replace: true})
   };
 
   const addProcesso = () => {
@@ -36,7 +39,7 @@ export function Processos() {
         tempo: currentProcesso.tempo || 0,
         tamanho: currentProcesso.tamanho || 0,
         deadline: currentProcesso.deadline || 0,
-        finalizado: false,
+        estado: "disco",
         paginasAlocadas : []
       };
       setProcessos((prev) => [...prev, newProcesso]);
@@ -83,7 +86,7 @@ export function Processos() {
             </p>
           ))}
           <p className="mb-2 text-white">
-            <span className="font-semibold text-primary">Finalizado:</span> {processo.finalizado ? "Sim" : "Não"}
+            <span className="font-semibold text-primary">Finalizado:</span> {processo.estado}
           </p>
         </CardContent>
       </Card>

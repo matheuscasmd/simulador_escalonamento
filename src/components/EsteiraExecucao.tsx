@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card } from "./ui/card"
+import { IEstado } from "@/algoritmos/IEstado"
 
-type Estado = "ram" | "execucao" | "sobrecarga" | "disco" | "ausente" | "finalizado"
 
 type EsteiraExecucaoProps = {
-  lista: Estado[][]
+  lista: IEstado[][]
 }
 
-const estadoCores: Record<Estado, string> = {
+const estadoCores: Record<IEstado, string> = {
   ram: "bg-blue-500",
   execucao: "bg-[#00FF00]",
   sobrecarga: "bg-yellow-500",
