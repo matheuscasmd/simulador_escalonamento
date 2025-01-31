@@ -25,16 +25,14 @@ function Execucao() {
     const processosSalvos = localStorage.getItem("processos");
     if (processosSalvos) {
         const processosArray: IProcesso[] = JSON.parse(processosSalvos);
-        console.log(processosArray)
         setProcessos(processosArray);
-        console.log(processos)
-
     }
   }, []);
 
   useEffect(() => {
     let tempo = 0;
     const processosPendentes = [...processos];
+    console.log(processos)
     const executarEscalonador = () => {
       while (processosPendentes.some(p => p.estado != "finalizado")) {
         const processosChegando = processosPendentes.filter(p => p.tempoChegada === tempo && p.estado != "finalizado");

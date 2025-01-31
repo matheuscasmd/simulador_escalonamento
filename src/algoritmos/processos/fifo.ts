@@ -4,11 +4,9 @@ import { IProcesso } from "../IProcesso";
 export class FIFOScheduler {
     public fila: IProcesso[] = [];
     public IProcessoAtual: IProcesso | null = null;
-    public input: IProcesso[] = [];
   
     adicionarProcesso(IProcesso: IProcesso) {
       this.fila.push(IProcesso);
-      this.input.push(IProcesso);
     }
   
     executarPasso(): IProcesso | null {
@@ -28,16 +26,19 @@ export class FIFOScheduler {
       return null;
     }
     retornarEstados(): IEstado[] {
-      const estadosAtuais: IEstado[] = [];
+    const estadosAtuais: IEstado[] = [];
 
-      if (this.IProcessoAtual) {
-          estadosAtuais.push(this.IProcessoAtual.estado);
-      }
+    if (this.IProcessoAtual) {
+        estadosAtuais.push(this.IProcessoAtual.estado);
+    }
 
-      this.input.forEach(processo => {
-          estadosAtuais.push(processo.estado);
-      });
+    this.fila.forEach(processo => {
+        estadosAtuais.push(processo.estado);
+    });
 
-      return estadosAtuais;
-  }
+    // Ordena os estados com base na propriedade 'chegada' de cada processo
+    const processosChegada = estadosAtuais.sort((a, b) => a.processo.chegada - b.processo.chegada);
+
+    return estadosAtuais;
+}
 }

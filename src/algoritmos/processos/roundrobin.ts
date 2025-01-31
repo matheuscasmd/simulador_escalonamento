@@ -28,7 +28,7 @@ export class RoundRobinScheduler {
 
             if (this.IProcessoAtual.tempo <= 0) {
                 const finalizado = this.IProcessoAtual;
-                finalizado.finalizado = true;
+                this.IProcessoAtual.estado =  'finalizado';
                 this.IProcessoAtual = null;
                 return finalizado;
             }
