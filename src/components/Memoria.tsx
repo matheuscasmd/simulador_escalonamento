@@ -54,7 +54,9 @@ export function MemoriaCard({ RAMvsTempo, DISCOvsTempo, velocidade }: MemoriaCar
       ))}
     </div>
   );
-
+  if (!RAMvsTempo || !DISCOvsTempo || RAMvsTempo.length === 0) {
+    return <p>Carregando memória...</p>;
+  }
   return (
     <Card className="bg-muted border-border w-full max-w-[1000px] mx-auto">
       <CardHeader>

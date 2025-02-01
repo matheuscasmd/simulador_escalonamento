@@ -1,7 +1,7 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 
-export function rr(processes_input: IProcesso[], quantum: number, preemptive: number): { output: number[][], average_turnaround: number,ramHistory:number[][],discoHistory:number[][] } {
+export function rr(processes_input: IProcesso[], quantum: number, preemptive: number): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
     let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
 
     let n = processes.length;

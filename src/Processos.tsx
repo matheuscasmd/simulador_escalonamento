@@ -44,7 +44,7 @@ export function Processos() {
               chegada: currentProcesso.chegada || 0,
               tempo: currentProcesso.tempo || 0,
               tamanho: currentProcesso.tamanho || 0,
-              deadline: currentProcesso.deadline || undefined,
+              deadline: currentProcesso.deadline || 0,
               tempoEspera: 0,
               finalizado: false,
               turnaround: 0

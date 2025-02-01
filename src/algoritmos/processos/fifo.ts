@@ -1,7 +1,7 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 
-export function fifo(processes_input: IProcesso[]): { output: number[][], average_turnaround: number, ramHistory:number[][],discoHistory:number[][] } {
+export function fifo(processes_input: IProcesso[]): { output: number[][], average_turnaround: number, ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
     let processes = processes_input.map(p => ({ ...p }));
     let n = processes.length;
     let completed = 0;

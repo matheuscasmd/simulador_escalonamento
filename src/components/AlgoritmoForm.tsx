@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,10 +13,10 @@ interface ExecucaoData {
 }
 
 type ConfigFormProps = {
-  setExecutar():void
+  setExecutar(): void
 }
 
-export default function ConfigForm(props : ConfigFormProps) {
+export default function ConfigForm(props: ConfigFormProps) {
   const [isEditing, setIsEditing] = useState(true)
   const [config, setConfig] = useState<ExecucaoData>({
     sobrecarga: 0,
@@ -29,6 +27,11 @@ export default function ConfigForm(props : ConfigFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Salvar o objeto config no localStorage
+    localStorage.setItem('config', JSON.stringify(config))
+    
+    // Desativar o modo de edição
     setIsEditing(false)
   }
 
@@ -94,6 +97,8 @@ export default function ConfigForm(props : ConfigFormProps) {
                     <SelectContent>
                       <SelectItem value="FIFO">FIFO</SelectItem>
                       <SelectItem value="EDF">EDF</SelectItem>
+                      <SelectItem value="RR">RR</SelectItem>
+                      <SelectItem value="SJF">SJF</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -166,10 +171,9 @@ export default function ConfigForm(props : ConfigFormProps) {
               </div>
             </div>
           </CardContent>
-          <Button variant="outline" onClick={()=>props.setExecutar()}>Executar</Button>
+          <Button variant="outline" onClick={() => props.setExecutar()}>Executar</Button>
         </Card>
       )}
     </div>
   )
 }
-
