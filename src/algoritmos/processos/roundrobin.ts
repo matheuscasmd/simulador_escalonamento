@@ -32,6 +32,7 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
     while (completedProcesses.length < n) {
         if (readyQueue.length === 0) {
             current_time++;
+            memoryManager.copiarEstado();
             while (counter < n && processes[counter].chegada <= current_time) {
                 readyQueue.push(counter);
                 counter++;
