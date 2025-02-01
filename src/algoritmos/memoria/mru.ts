@@ -1,6 +1,6 @@
 import { IProcesso } from "../IProcesso";
 
-export class FIFOMemoryManager {
+export class MRUMemoryManager {
   public discSize: number;
   public discArray: (number | null)[];
   public freeDiscPages: number[];
@@ -46,6 +46,7 @@ export class FIFOMemoryManager {
     if (!processo || processo.memoria !== "disco") {
       this.registrarEstadoRAM();
       this.registrarEstadoDISCO();
+      this.atualizar_fila(processo);
       return};
     
     if (this.freeRAMPages.length >= processo.tamanho) {

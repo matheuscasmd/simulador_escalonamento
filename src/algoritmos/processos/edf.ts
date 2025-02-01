@@ -1,5 +1,6 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
+import { MRUMemoryManager } from "../memoria/mru";
 
 export function edf(processes_input: IProcesso[], quantum: number, preemptive: number, memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number, ramHistory: (number|null)[][], discoHistory: (number|null)[][] } {
   let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
@@ -10,7 +11,14 @@ export function edf(processes_input: IProcesso[], quantum: number, preemptive: n
   let counter: number = 0;
   let readyQueue: number[] = [];
   let output: number[][] = Array.from({ length: n }, () => Array(10000).fill(-1));
-  let memoryManager = new FIFOMemoryManager(50, 150, processes);
+
+  let memoryManager;
+  if(memoria === "FIFO"){
+      memoryManager = new FIFOMemoryManager(50,150,processes)
+  }
+  else {
+      memoryManager = new MRUMemoryManager(50,150,processes)
+  }
 
   while (counter < n && processes[counter].chegada <= current_time) {
       readyQueue.push(counter);

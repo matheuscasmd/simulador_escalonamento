@@ -1,5 +1,6 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
+import { MRUMemoryManager } from "../memoria/mru";
 
 //passar como parametro memoria : "FIFO" | "MRU"
 export function fifo(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number, ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
@@ -11,14 +12,13 @@ export function fifo(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { 
 
     let completedProcesses: IProcesso[] = [];
 
-    const  memoryManager = new FIFOMemoryManager(50,150,processes_input)
-    // let memoryManager;
-    // if(memoria === "FIFO"){
-    //     memoryManager = new FIFOMemoryManager(50,150,processes_input)
-    // }
-    // else {
-    //     memoryManager = new MRUMemoryManager(50,150,processes_input)
-    // }
+    let memoryManager;
+    if(memoria === "FIFO"){
+        memoryManager = new FIFOMemoryManager(50,150,processes)
+    }
+    else {
+        memoryManager = new MRUMemoryManager(50,150,processes)
+    }
 
     processes.sort((a, b) => a.chegada - b.chegada);
 

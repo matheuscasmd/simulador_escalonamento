@@ -1,5 +1,6 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
+import { MRUMemoryManager } from "../memoria/mru";
 
 export function rr(processes_input: IProcesso[], quantum: number, preemptive: number, memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
     let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
@@ -12,7 +13,14 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
 
     let readyQueue: number[] = [];
     let output: number[][] = [];
-    let memoryManager = new FIFOMemoryManager(50, 150, processes);
+    let memoryManager;
+    if(memoria === "FIFO"){
+        memoryManager = new FIFOMemoryManager(50,150,processes)
+    }
+    else {
+        memoryManager = new MRUMemoryManager(50,150,processes)
+    }
+    
 
     output = Array.from({ length: n }, () => Array(10000).fill(-1));
 
