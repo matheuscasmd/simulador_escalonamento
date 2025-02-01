@@ -116,6 +116,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="FIFO">FIFO</SelectItem>
+                      <SelectItem value="MRU">MRU</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
