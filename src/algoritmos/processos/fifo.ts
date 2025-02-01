@@ -23,7 +23,6 @@ export function fifo(processes_input: IProcesso[]): { output: number[][], averag
 
           
           memoryManager.alocarProcessoRAM(actuallP);
-
           current_time += actuallP.tempo;
 
           wait = current_time - actuallP.chegada - actuallP.tempo;

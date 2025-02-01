@@ -1,53 +1,45 @@
-import { useState, useEffect } from "react"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { useState, useEffect, useMemo } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 type MemoriaSlot = {
-  id: number | null
-  status: "livre" | "ocupado" | "execucao"
-}
+  id: number | null;
+};
 
 type MemoriaCardProps = {
-  RAMvsTempo: (number | null)[][]
-  DISCOvsTempo: (number | null)[][]
-  velocidade: number // Tempo em ms entre as atualizações
-}
+  RAMvsTempo: (number | null)[][];
+  DISCOvsTempo: (number | null)[][];
+  velocidade: number;
+};
 
 export function MemoriaCard({ RAMvsTempo, DISCOvsTempo, velocidade }: MemoriaCardProps) {
-  const [ramSlots, setRamSlots] = useState<MemoriaSlot[]>(Array(50).fill({ id: null, status: "livre" }))
-  const [discoSlots, setDiscoSlots] = useState<MemoriaSlot[]>(Array(150).fill({ id: null, status: "livre" }))
-  const [frame, setFrame] = useState(0)
+  const [frame, setFrame] = useState(0);
 
   useEffect(() => {
-    if ( !RAMvsTempo || !DISCOvsTempo) return
-
+    if (!RAMvsTempo || !DISCOvsTempo) return;
+    
     const interval = setInterval(() => {
-      setFrame((prevFrame) => (prevFrame + 1) % RAMvsTempo.length)
-    }, velocidade)
+      setFrame((prevFrame) => {
+        if (prevFrame + 1 >= RAMvsTempo.length) {
+          clearInterval(interval);
+          return prevFrame;
+        }
+        return prevFrame + 1;
+      });
+    }, (1 / velocidade) * 1000);
+  
+    return () => clearInterval(interval);
+  }, [RAMvsTempo, DISCOvsTempo, velocidade]);
+  
 
-    return () => clearInterval(interval)
-  }, [RAMvsTempo, DISCOvsTempo, velocidade])
+  const ramSlots = useMemo(() =>
+    RAMvsTempo[frame]?.map((processId) => ({ id: processId })) || Array(50).fill(null),
+    [frame, RAMvsTempo]
+  );
 
-  useEffect(() => {
-    if (RAMvsTempo) {
-      setRamSlots(
-        RAMvsTempo[frame].map((processId, index) => ({
-          id: processId,
-          status: processId === null ? "livre" : index === RAMvsTempo[frame].findIndex(p => p !== null) ? "execucao" : "ocupado",
-        }))
-      )
-    }
-  }, [frame, RAMvsTempo])
-
-  useEffect(() => {
-    if ( DISCOvsTempo && DISCOvsTempo.length > 0) {
-      setDiscoSlots(
-        DISCOvsTempo[frame].map((processId) => ({
-          id: processId,
-          status: processId === null ? "livre" : "ocupado",
-        }))
-      )
-    }
-  }, [frame, DISCOvsTempo])
+  const discoSlots = useMemo(() =>
+    DISCOvsTempo[frame]?.map((processId) => ({ id: processId })) || Array(150).fill(null),
+    [frame, DISCOvsTempo]
+  );
 
   const renderSlots = (slots: MemoriaSlot[], isRam: boolean) => (
     <div className="flex flex-wrap gap-[2px]">
@@ -55,21 +47,13 @@ export function MemoriaCard({ RAMvsTempo, DISCOvsTempo, velocidade }: MemoriaCar
         <div
           key={index}
           className={`w-6 h-6 border border-[#333333] rounded-[4px] flex items-center justify-center
-            ${
-              slot.status === "livre"
-                ? "bg-transparent"
-                : isRam
-                  ? slot.status === "execucao"
-                    ? "bg-blue-500"
-                    : "bg-green-500"
-                  : "bg-purple-500"
-            }`}
+            ${slot.id === null ? "bg-transparent" : isRam ? "bg-green-500" : "bg-purple-500"}`}
         >
           {slot.id !== null && <span className="text-white text-[8px] font-bold">{slot.id}</span>}
         </div>
       ))}
     </div>
-  )
+  );
 
   return (
     <Card className="bg-muted border-border w-full max-w-[1000px] mx-auto">
@@ -87,5 +71,5 @@ export function MemoriaCard({ RAMvsTempo, DISCOvsTempo, velocidade }: MemoriaCar
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -10,6 +10,7 @@ type EsteiraExecucaoProps = {
   // lista: IEstado[][]
   lista : number[][]
   turnaround : number
+  velocidade : number
 }
 
 const estadoCores: Record<number, string> = {
@@ -21,10 +22,9 @@ const estadoCores: Record<number, string> = {
   6: "bg-gray-500",
 }
 
-const VELOCIDADES_PREDEFINIDAS = [1, 2, 5, 10] // Velocidades em segundos
 
-export function EsteiraExecucao({ lista,turnaround }: EsteiraExecucaoProps) {
-  const [velocidade, setVelocidade] = useState<number>(2) // Velocidade inicial: 2s
+
+export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucaoProps) {
   const [visibleStates, setVisibleStates] = useState<number[]>(lista.map(() => 0))
 
   useEffect(() => {
@@ -37,27 +37,11 @@ export function EsteiraExecucao({ lista,turnaround }: EsteiraExecucaoProps) {
     return () => clearInterval(interval)
   }, [lista, velocidade])
 
-  const handleVelocidadeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setVelocidade(Number(e.target.value))
-  }
 
   return (
     <Card className="bg-[#1A1A1A] border border-[#333333] rounded-lg flex flex-col space-y-4 p-6 w-full mx-40 overflow-x-auto">
       {/* Seletor de Velocidade */}
-      <div className="flex items-center gap-4 sticky left-0">
-        <span className="text-[#00FF00] text-lg font-medium">Velocidade: </span>
-        <select
-          value={velocidade}
-          onChange={handleVelocidadeChange}
-          className="bg-[#2A2A2A] text-[#00FF00] border border-[#333333] rounded-lg px-4 py-2 text-xl"
-        >
-          {VELOCIDADES_PREDEFINIDAS.map((v) => (
-            <option key={v} value={v}>
-              {v}x
-            </option>
-          ))}
-        </select>
-      </div>
+      
 
       {/* Renderização da Lista de Processos */}
       <div className="min-w-max">
