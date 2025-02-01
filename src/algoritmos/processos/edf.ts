@@ -1,7 +1,7 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 
-export function edf(processes_input: IProcesso[], quantum: number, preemptive: number): { output: number[][], average_turnaround: number, ramHistory: (number|null)[][], discoHistory: (number|null)[][] } {
+export function edf(processes_input: IProcesso[], quantum: number, preemptive: number, memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number, ramHistory: (number|null)[][], discoHistory: (number|null)[][] } {
   let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
   let n = processes.length;
   let current_time = 0;

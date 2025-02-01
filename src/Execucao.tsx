@@ -24,7 +24,7 @@ function Execucao() {
   const [quantum,setQuantum] = useState<number>(0)
   const [sobrecarga,setSobrecarga] = useState<number>(0)
   const [turnaround,setTurnaround] = useState(0)
-  // const [algoritmoMemoria,setAlgoritmoProcessos] = useState()
+  const [algoritmoMemoria,setAlgoritmoMemoria] = useState<"FIFO" | "MRU">("FIFO")
 
   const handleVelocidadeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setVelocidade(Number(e.target.value))
@@ -50,6 +50,7 @@ function Execucao() {
       setDiscovsTempo(algoritmo.discoHistory)
       setRAMvsTempo(algoritmo.ramHistory)
       setTurnaround(algoritmo.average_turnaround)
+      setAlgoritmoMemoria(parsed.algoritmoMemoria)
     }
     if (processosSalvos) setProcessos(JSON.parse(processosSalvos));
   }, [executar]);
@@ -60,13 +61,13 @@ function Execucao() {
   function getProcessosAlgoritmo(alg : "FIFO" | "EDF" | "RR" | "SJF"){
     switch(alg){
       case "FIFO":
-        return fifo(processos)
+        return fifo(processos,algoritmoMemoria)
       case "EDF":
-        return edf(processos,quantum,sobrecarga)
+        return edf(processos,quantum,sobrecarga,algoritmoMemoria)
       case "RR":
-        return rr(processos,quantum,sobrecarga)
+        return rr(processos,quantum,sobrecarga,algoritmoMemoria)
       case "SJF":
-        return sjf(processos)
+        return sjf(processos,algoritmoMemoria)
     }
   }
   

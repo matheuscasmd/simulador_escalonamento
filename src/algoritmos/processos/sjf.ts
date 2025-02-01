@@ -1,7 +1,7 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 
-export function sjf(processes_input: IProcesso[]): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
+export function sjf(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
   let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
   let n = processes.length;
   let completed = 0;
