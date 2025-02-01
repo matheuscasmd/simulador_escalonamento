@@ -43,7 +43,10 @@ export class FIFOMemoryManager {
   }
 
   public alocarProcessoRAM(processo: IProcesso): void {
-    if (!processo || processo.memoria !== "disco") return;
+    if (!processo || processo.memoria !== "disco") {
+      this.registrarEstadoRAM();
+      this.registrarEstadoDISCO();
+      return};
     
     if (this.freeRAMPages.length >= processo.tamanho) {
       this.tempo++;
@@ -58,7 +61,7 @@ export class FIFOMemoryManager {
       
       this.liberarDisco(processo);
       processo.memoria = "ram";
-      console.log(processo.id);
+      //console.log(processo.id);
 
       this.registrarEstadoRAM();
       this.registrarEstadoDISCO();
@@ -103,6 +106,7 @@ export class FIFOMemoryManager {
         this.freeDiscPages.push(i);
       }
     }
+    this.freeDiscPages.sort((a, b) => a - b);
   }
 
   public copiarEstado(): void {

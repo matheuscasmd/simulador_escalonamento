@@ -4,7 +4,7 @@ export interface IProcesso {
   tempo: number;
   tempoEspera: number;
   tamanho: number;
-  deadline?: number;
+  deadline: number;
   finalizado: boolean;
   memoria?: "ram" | "disco";
   turnaround?: number;
