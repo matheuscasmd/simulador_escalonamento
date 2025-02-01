@@ -14,7 +14,11 @@ interface ExecucaoData {
   algoritmoMemoria: string
 }
 
-export default function ConfigForm() {
+type ConfigFormProps = {
+  setExecutar():void
+}
+
+export default function ConfigForm(props : ConfigFormProps) {
   const [isEditing, setIsEditing] = useState(true)
   const [config, setConfig] = useState<ExecucaoData>({
     sobrecarga: 0,
@@ -162,6 +166,7 @@ export default function ConfigForm() {
               </div>
             </div>
           </CardContent>
+          <Button variant="outline" onClick={()=>props.setExecutar()}>Executar</Button>
         </Card>
       )}
     </div>

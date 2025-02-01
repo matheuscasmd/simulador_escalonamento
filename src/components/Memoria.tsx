@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 
@@ -9,34 +7,47 @@ type MemoriaSlot = {
 }
 
 type MemoriaCardProps = {
-  ram: number[]
-  disco: number[]
+  RAMvsTempo: (number | null)[][]
+  DISCOvsTempo: (number | null)[][]
+  velocidade: number // Tempo em ms entre as atualizações
 }
 
-export function MemoriaCard({ ram, disco }: MemoriaCardProps) {
+export function MemoriaCard({ RAMvsTempo, DISCOvsTempo, velocidade }: MemoriaCardProps) {
   const [ramSlots, setRamSlots] = useState<MemoriaSlot[]>(Array(50).fill({ id: null, status: "livre" }))
   const [discoSlots, setDiscoSlots] = useState<MemoriaSlot[]>(Array(150).fill({ id: null, status: "livre" }))
+  const [frame, setFrame] = useState(0)
 
   useEffect(() => {
-    if(ram.length != 0){
-      
+    if ( !RAMvsTempo || !DISCOvsTempo) return
+
+    const interval = setInterval(() => {
+      setFrame((prevFrame) => (prevFrame + 1) % RAMvsTempo.length)
+    }, velocidade)
+
+    return () => clearInterval(interval)
+  }, [RAMvsTempo, DISCOvsTempo, velocidade])
+
+  useEffect(() => {
+    if (RAMvsTempo) {
+      setRamSlots(
+        RAMvsTempo[frame].map((processId, index) => ({
+          id: processId,
+          status: processId === null ? "livre" : index === RAMvsTempo[frame].findIndex(p => p !== null) ? "execucao" : "ocupado",
+        }))
+      )
     }
-    setRamSlots(
-      ram.map((processId, index) => ({
-        id: processId,
-        status: processId === null ? "livre" : index === ram.findIndex(p => p !== null) ? "execucao" : "ocupado",
-      }))
-    )
-  }, [ram])
+  }, [frame, RAMvsTempo])
 
   useEffect(() => {
-    setDiscoSlots(
-      disco.map((processId) => ({
-        id: processId,
-        status: processId === null ? "livre" : "ocupado",
-      }))
-    )
-  }, [disco])
+    if ( DISCOvsTempo && DISCOvsTempo.length > 0) {
+      setDiscoSlots(
+        DISCOvsTempo[frame].map((processId) => ({
+          id: processId,
+          status: processId === null ? "livre" : "ocupado",
+        }))
+      )
+    }
+  }, [frame, DISCOvsTempo])
 
   const renderSlots = (slots: MemoriaSlot[], isRam: boolean) => (
     <div className="flex flex-wrap gap-[2px]">

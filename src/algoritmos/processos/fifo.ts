@@ -1,141 +1,74 @@
-export interface IProcesso {
-  id: number;
-  chegada: number;
-  tempo: number;
-  tamanho: number;
-  deadline: number;
-  finalizado: boolean;
-  memoria?: "ram" | "disco";
-  indicePaginasAlocadas?: number[];
-}
+import { IProcesso } from "../IProcesso";
+import { FIFOMemoryManager } from "../memoria/fifo";
 
-export class FIFOMemoryManager {
-  public discSize: number;
-  public discArray: (number | null)[];
-  public freeDiscPages: number[];
-  public RAMSize: number;
-  public RAMArray: (number | null)[];
-  public freeRAMPages: number[];
-  public paginasOcupadas: number[];
-  public processInput: IProcesso[];
-  public pageFaults: number;
-  public RAMvsTempo: (number | null)[][];
-  public DISCOvsTempo: (number | null)[][];
-  public tempo: number;
+export function fifo(processes_input: IProcesso[]): { output: number[][], average_turnaround: number, ramHistory:(number | null)[][],discoHistory: (number | null)[][] } {
+  let processes = processes_input.map(p => ({ ...p }));
+  let n = processes.length;
+  let completed = 0;
+  let current_time = 0;
+  let totalTurnaroundTime = 0;
 
-  constructor(ramSize: number, discSize: number, processos: IProcesso[]) {
-    this.RAMSize = ramSize;
-    this.RAMArray = new Array(ramSize).fill(null);
-    this.freeRAMPages = Array.from({ length: ramSize }, (_, i) => i);
+  let completedProcesses: IProcesso[] = [];
+  const memoryManager = new FIFOMemoryManager(50, 150, processes);
 
-    this.discSize = discSize;
-    this.discArray = new Array(discSize).fill(null);
-    this.freeDiscPages = Array.from({ length: discSize }, (_, i) => i);
+  processes.sort((a, b) => a.chegada - b.chegada);
 
-    this.paginasOcupadas = [];
-    this.processInput = processos;
-    this.pageFaults = 0;
-    this.tempo = 0;
+  while (completed < n) {
+      let ready = processes.filter(p => p.chegada <= current_time && !p.finalizado);
 
-    this.RAMvsTempo = [];
-    this.DISCOvsTempo = [];
+      if (ready.length > 0) {
+          let actuallP = ready[0];
+          let wait: number = 0;
+          let turnaround: number = 0;
 
-    this.alocarDiscoTudo(processos);
-  }
+          
+          memoryManager.alocarProcessoRAM(actuallP);
 
-  private registrarEstadoRAM(): void {
-    this.RAMvsTempo.push([...this.RAMArray]);
-  }
+          current_time += actuallP.tempo;
 
-  private registrarEstadoDISCO(): void {
-    this.DISCOvsTempo.push([...this.discArray]);
-  }
+          wait = current_time - actuallP.chegada - actuallP.tempo;
+          turnaround = current_time - actuallP.chegada;
 
-  public alocarProcessoRAM(): void {
-    this.tempo++;
+          totalTurnaroundTime += turnaround;
 
-    const processo = this.processInput.find(
-      (p) => p.memoria === "disco"
-    );
+          actuallP.finalizado = true;
+          actuallP.tempoEspera = wait;
+          actuallP.turnaround = turnaround;
 
-    if (!processo) return; // Se não houver processos para alocar, sai
-
-    if (this.freeRAMPages.length >= processo.tamanho) {
-      // Há espaço na RAM, aloca normalmente
-      processo.indicePaginasAlocadas = [];
-
-      for (let i = 0; i < processo.tamanho; i++) {
-        const pagina = this.freeRAMPages.shift()!;
-        this.RAMArray[pagina] = processo.id;
-        processo.indicePaginasAlocadas.push(pagina);
+          completedProcesses.push(actuallP);
+          
+          completed++;
+          for(let i = 0;i<actuallP.tempo-1;i++){
+              memoryManager.copiarEstado();
+          }
+      } else {
+          memoryManager.copiarEstado();
+          current_time++;
       }
-
-      processo.memoria = "ram";
-    } else {
-      this.pageFaults++;
-      this.liberarProcessoRAM();
-      this.alocarProcessoRAM();
-    }
-
-    this.registrarEstadoRAM();
   }
 
-  private liberarProcessoRAM(): void {
-    if (this.paginasOcupadas.length === 0) return;
-
-    // Remove o primeiro processo da RAM completamente
-    const processoRemovido = this.processInput.find(p =>
-      p.indicePaginasAlocadas?.some(pagina => this.RAMArray[pagina] !== null)
-    );
-
-    if (!processoRemovido) return;
-
-    const paginasParaRemover = [...processoRemovido.indicePaginasAlocadas!];
-
-    // Libera todas as páginas desse processo da RAM
-    paginasParaRemover.forEach((pagina) => {
-      this.RAMArray[pagina] = null;
-      this.freeRAMPages.push(pagina);
-    });
-
-    // Move todo o processo para o disco
-    this.moverRAMparaDISCO(processoRemovido);
-
-    this.registrarEstadoRAM();
+  let output: number[][] = [];
+  for (let i = 0; i < completedProcesses.length; i++) {
+      output[i] = [];
   }
 
-  private alocarDiscoTudo(processos: IProcesso[]): void {
-    processos.forEach((processo) => {
-      if (this.freeDiscPages.length >= processo.tamanho) {
-        processo.indicePaginasAlocadas = [];
-
-        for (let i = 0; i < processo.tamanho; i++) {
-          const pagina = this.freeDiscPages.shift()!;
-          this.discArray[pagina] = processo.id;
-          processo.indicePaginasAlocadas.push(pagina);
-        }
-
-        processo.memoria = "disco";
+  let count: number = 0;
+  completedProcesses.forEach(process => {
+      for (let i = 0; i < current_time; i++) {
+          if (i < process.chegada) {
+              output[count][i] = 5;
+          } else if (i < process.tempoEspera + process.chegada) {
+              output[count][i] = 3;
+          } else if (i < process.tempo + process.tempoEspera + process.chegada) {
+              output[count][i] = 1;
+          } else {
+              output[count][i] = 5;
+          }
       }
-    });
+      count++;
+  });
 
-    this.registrarEstadoDISCO();
-  }
+  let average_turnaround = totalTurnaroundTime / n
 
-  private moverRAMparaDISCO(processo: IProcesso): void {
-    if (this.freeDiscPages.length < processo.tamanho) return;
-
-    processo.indicePaginasAlocadas?.forEach((pagina) => {
-      if (this.RAMArray[pagina] !== null) {
-        const discIndex = this.freeDiscPages.shift()!;
-        this.discArray[discIndex] = this.RAMArray[pagina];
-        this.RAMArray[pagina] = null;
-        this.freeRAMPages.push(pagina);
-      }
-    });
-
-    processo.memoria = "disco";
-
-    this.registrarEstadoDISCO();
-  }
+  return { output, average_turnaround , ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo};
 }

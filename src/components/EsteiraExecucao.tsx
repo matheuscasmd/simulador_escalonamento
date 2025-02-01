@@ -7,21 +7,23 @@ import { IEstado } from "@/algoritmos/IEstado"
 
 
 type EsteiraExecucaoProps = {
-  lista: IEstado[][]
+  // lista: IEstado[][]
+  lista : number[][]
+  turnaround : number
 }
 
-const estadoCores: Record<IEstado, string> = {
-  ram: "bg-blue-500",
-  execucao: "bg-[#00FF00]",
-  sobrecarga: "bg-yellow-500",
-  disco: "bg-purple-500",
-  ausente: "bg-[#2A2A2A]",
-  finalizado: "bg-gray-500",
+const estadoCores: Record<number, string> = {
+  2: "bg-blue-500",
+  1: "bg-[#00FF00]",
+  4: "bg-purple-500",
+  3: "bg-yellow-500",
+  5: "bg-[#2A2A2A]",
+  6: "bg-gray-500",
 }
 
 const VELOCIDADES_PREDEFINIDAS = [1, 2, 5, 10] // Velocidades em segundos
 
-export function EsteiraExecucao({ lista }: EsteiraExecucaoProps) {
+export function EsteiraExecucao({ lista,turnaround }: EsteiraExecucaoProps) {
   const [velocidade, setVelocidade] = useState<number>(2) // Velocidade inicial: 2s
   const [visibleStates, setVisibleStates] = useState<number[]>(lista.map(() => 0))
 
@@ -51,7 +53,7 @@ export function EsteiraExecucao({ lista }: EsteiraExecucaoProps) {
         >
           {VELOCIDADES_PREDEFINIDAS.map((v) => (
             <option key={v} value={v}>
-              {v}s
+              {v}x
             </option>
           ))}
         </select>
@@ -88,6 +90,9 @@ export function EsteiraExecucao({ lista }: EsteiraExecucaoProps) {
             <span className="text-[#00FF00] font-medium capitalize text-lg">{estado}</span>
           </div>
         ))}
+      </div>
+      <div>
+        <p className="text-lg text-[#00FF00]">Turnaround: {turnaround} </p>
       </div>
     </Card>
   )

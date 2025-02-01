@@ -1,12 +1,12 @@
-import { IEstado } from "./IEstado";
-
 export interface IProcesso {
-    id: number;
-    tempoChegada: number;
-    tempo: number;
-    tamanho: number;
-    deadline : number
-    posicaoInicialRAM?: number;
-    paginasAlocadas: number[]; // Páginas alocadas na RAM
-    estado : IEstado
-  }
+  id: number;
+  chegada: number;
+  tempo: number;
+  tempoEspera: number;
+  tamanho: number;
+  deadline?: number;
+  finalizado: boolean;
+  memoria?: "ram" | "disco";
+  turnaround?: number;
+  indicePaginasAlocadas?: number[];
+}
