@@ -91,7 +91,6 @@ export class FIFOMemoryManager {
         this.freeRAMPages.push(pagina);
       }
     });
-
     processo.memoria = "disco";
     processo.indicePaginasAlocadas = [];
   }
@@ -103,6 +102,7 @@ export class FIFOMemoryManager {
         this.freeDiscPages.push(i);
       }
     }
+    this.freeDiscPages.sort((a, b) => a - b);
   }
 
   public copiarEstado(): void {
