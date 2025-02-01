@@ -1,10 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import ReactDOM from "react-dom/client";
+import "./index.css"
+import AppRoutes from "./routes";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("Elemento root não encontrado!");
+}
+
+const root = ReactDOM.createRoot(rootElement);
+
+root.render(
+  <AppRoutes/>
+);
