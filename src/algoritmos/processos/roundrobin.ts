@@ -103,9 +103,10 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
 
     output = output.map(row => row.filter(cell => cell !== -1));
     const orderedOutput: number[][] = new Array(n);
+      
     for (let i = 0; i < n; i++) {
         orderedOutput[processes[i].id] = output[i];
     }
-
+    orderedOutput.shift();
     return { output: orderedOutput, average_turnaround: totalTurnaroundTime / n, ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo };
 }
