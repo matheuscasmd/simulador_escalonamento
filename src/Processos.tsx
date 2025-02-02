@@ -35,13 +35,16 @@ export function Processos() {
     }
   }, [])
 
+  useEffect(() =>{
+    localStorage.setItem("processos", JSON.stringify(processos))
+  },[processos])
+
   
   const router = useNavigate()
   const itemsPerPage = 5
   const totalPages = Math.ceil(processos.length / itemsPerPage)
 
-  const saveAndGoToAlgorithms = () => {
-    localStorage.setItem("processos", JSON.stringify(processos))
+  const goToAlgorithms = () => {
     router("/app/execucao", { replace: true })
   }
 
@@ -69,7 +72,6 @@ export function Processos() {
       }
       setProcessos((prev) => [...prev, newProcesso])
       setCurrentProcesso({})
-      // Move to the last page if we've added more than itemsPerPage items
       if (processos.length + 1 > itemsPerPage) {
         setCurrentPage(Math.floor(processos.length / itemsPerPage))
       }
@@ -251,7 +253,7 @@ export function Processos() {
                   </div>
                 </CardContent>
               </Card>
-              <Button onClick={saveAndGoToAlgorithms} className="mb-4">
+              <Button onClick={goToAlgorithms} className="mb-4">
                 Algoritmos de escalonamento 
               </Button>
             </div>
