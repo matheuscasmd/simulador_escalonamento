@@ -1,4 +1,5 @@
-import { Home, Settings, History, RotateCcw,CircleHelp, Play } from 'lucide-react'
+import Logo from "../assets/Group.png"
+import { History, RotateCcw, CircleHelp, Play } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -25,26 +26,39 @@ const menuItems = [
 
 export function Menu() {
   const router = useNavigate()
+  
   return (
-    <SidebarProvider className='w-fit pt-4 text-white '>
-      <Sidebar className='max-w-21 border-none bg-white'>
-        <SidebarHeader className='w-full flex flex-row items-center text-left justify-start bg-sidebarItem cursor-pointer' onClick={()=>router("/home")}>
-          <img src="..\..\src\assets\Group.png" alt="logo" className='w-16'/>
-          <span className="text-5xl font-semibold tracking-tight">SO<span className='text-lg'>Simulator</span></span>
+    <SidebarProvider className="w-fit pt-4 text-white">
+      <Sidebar className="max-w-21 border-none bg-white h-screen flex flex-col">
+        
+        {/* Cabeçalho com tamanho ajustado */}
+        <SidebarHeader 
+          className="w-full flex flex-row items-center justify-start bg-sidebarItem p-3 cursor-pointer"
+          onClick={() => router("/home")}
+        >
+          <img src={Logo} alt="logo" className="w-12 h-12"/>
+          <span className="text-4xl font-semibold tracking-tight">
+            SO<span className="text-xl">Simulator</span>
+          </span>
         </SidebarHeader>
-        <SidebarContent className='bg-sidebarItem'>
+
+        {/* Conteúdo do menu com rolagem se necessário */}
+        <SidebarContent className="bg-sidebarItem overflow-y-auto flex-1">
           <TooltipProvider delayDuration={0}>
-            <SidebarMenu className='gap-4'>
+            <SidebarMenu className="gap-4">
               {menuItems.map((item, index) => (
-                <SidebarMenuItem key={index} className='bg-sidebarItem'>
+                <SidebarMenuItem key={index} className="bg-sidebarItem">
                   <Tooltip>
-                    <TooltipTrigger asChild >
-                      <SidebarMenuButton className='text-lg' onClick={() => router(item.url)}>
-                        <item.icon className="mr-2 size=- stroke-green-600" />
-                        {item.label}
+                    <TooltipTrigger asChild>
+                      <SidebarMenuButton 
+                        className="text-lg flex items-center space-x-2 px-4 py-2 w-full"
+                        onClick={() => router(item.url)}
+                      >
+                        <item.icon className="size-5 stroke-green-600" />
+                        <span>{item.label}</span>
                       </SidebarMenuButton>
                     </TooltipTrigger>
-                    <TooltipContent side="right" className='bg-sidebar'>
+                    <TooltipContent side="right" className="bg-sidebar">
                       <p>{item.tooltip}</p>
                     </TooltipContent>
                   </Tooltip>
@@ -53,8 +67,8 @@ export function Menu() {
             </SidebarMenu>
           </TooltipProvider>
         </SidebarContent>
+      
       </Sidebar>
     </SidebarProvider>
   )
 }
-

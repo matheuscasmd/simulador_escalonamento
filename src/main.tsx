@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import AppRoutes from "./routes";
-
+import "./index.css"
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {

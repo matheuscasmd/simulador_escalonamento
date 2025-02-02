@@ -95,7 +95,7 @@ function Execucao() {
       {executar && RAMvsTempo && DiscovsTempo && <MemoriaCard RAMvsTempo={RAMvsTempo.slice(1)} DISCOvsTempo={DiscovsTempo.slice(1)} velocidade={velocidade}/>}
       </div>
       {executar &&  output && turnaround && 
-      <Tabs defaultValue='execucao' className='w-full px-20'>
+      <Tabs defaultValue='execucao' className='w-full px-20 max-w-7xl'>
         <TabsList>
           <TabsTrigger value='execucao'>Execução</TabsTrigger>
           <TabsTrigger value='processos'>Processos</TabsTrigger>
