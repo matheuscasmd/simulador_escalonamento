@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import App from "./App";
-import Execucao from "./Execucao";
-import { Processos } from "./Processos";
-import { Welcome } from "./Home";
+import Execucao from "./pages/Execucao";
+import { Processos } from "./pages/Processos";
+import { Welcome } from "./pages/Home";
 
 const AppRoutes = () => {
   return (
