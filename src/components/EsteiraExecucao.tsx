@@ -91,7 +91,7 @@ export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucao
         ))}
       </div>
       <div>
-        <p className="text-lg text-[#00FF00]">Turnaround: {turnaround} </p>
+        <p className="text-lg text-[#00FF00]">Turnaround: {turnaround.toFixed(2)} </p>
       </div>
     </Card>
   )
