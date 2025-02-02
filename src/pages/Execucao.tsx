@@ -1,15 +1,14 @@
 import { useEffect,useState } from 'react';
-import './App.css'
-import AlgoritmoForm from './components/AlgoritmoForm';
-import { EsteiraExecucao } from './components/EsteiraExecucao'
-import { IProcesso } from './algoritmos/IProcesso';
-import { fifo } from './algoritmos/processos/fifo';
-import { MemoriaCard } from './components/Memoria';
-import { edf } from './algoritmos/processos/edf';
-import { rr } from './algoritmos/processos/roundrobin';
-import { sjf } from './algoritmos/processos/sjf';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
-import { Card, CardContent, CardTitle } from './components/ui/card';
+import AlgoritmoForm from '../components/AlgoritmoForm';
+import { EsteiraExecucao } from '../components/EsteiraExecucao'
+import { IProcesso } from '../algoritmos/IProcesso';
+import { fifo } from '../algoritmos/processos/fifo';
+import { MemoriaCard } from '../components/Memoria';
+import { edf } from '../algoritmos/processos/edf';
+import { rr } from '../algoritmos/processos/roundrobin';
+import { sjf } from '../algoritmos/processos/sjf';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardContent, CardTitle } from '../components/ui/card';
 
 
 

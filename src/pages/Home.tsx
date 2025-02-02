@@ -1,7 +1,5 @@
-"use client"
-
 import { ArrowRight } from "lucide-react"
-import { Button } from "./components/ui/button"
+import { Button } from "../components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 
@@ -72,7 +70,7 @@ export function Welcome() {
 
         <motion.div variants={itemVariants}>
           <Button
-            onClick={() => router("/app/processos",{replace : true})}
+            onClick={() => router("/app/ajuda",{replace : true})}
             size="lg"
             className="mt-8 bg-white/10 hover:bg-white/20 text-white border border-[#00FF00]/50 hover:border-[#00FF00] transition-all duration-300 group text-lg"
           >

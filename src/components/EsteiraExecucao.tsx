@@ -1,9 +1,6 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card } from "./ui/card"
-import { IEstado } from "@/algoritmos/IEstado"
 
 
 type EsteiraExecucaoProps = {

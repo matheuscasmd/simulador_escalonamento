@@ -1,1 +1,0 @@
-export type IEstado = "ram" | "execucao" | "sobrecarga" | "disco" | "ausente" | "finalizado"
