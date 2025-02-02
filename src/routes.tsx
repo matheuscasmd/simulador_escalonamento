@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import App from "./App";
 import Execucao from "./pages/Execucao";
 import { Processos } from "./pages/Processos";
@@ -14,7 +14,7 @@ const AppRoutes = () => {
         <Route path="/app" element={<App />}>
           <Route path="execucao" element={<Execucao />} />
           <Route path="processos" element={<Processos />} />
-          <Route path="ajuda" element={<Ajuda/>}/>
+          <Route path="ajuda" element={<Ajuda />} />
         </Route>
         <Route path="*" element={<p>Essa página não existe</p>} />
       </Routes>
