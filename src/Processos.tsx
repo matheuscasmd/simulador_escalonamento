@@ -54,7 +54,9 @@ export function Processos() {
   }
 
   const handleChange = (id: string, value: string) => {
-    setCurrentProcesso((prev) => ({ ...prev, [id]: value === "" ? undefined : Number(value) }))
+    if (/^\d*$/.test(value)) {
+      setCurrentProcesso((prev) => ({ ...prev, [id]: value === "" ? undefined : Number(value) }))
+    }
   }
 
   const addProcesso = () => {
@@ -103,7 +105,9 @@ export function Processos() {
   }
 
   const handleInputChange = (id: string, value: string) => {
-    setEditedProcess((prev) => ({ ...prev, [id]: value === "" ? undefined : Number(value) }))
+    if (/^\d*$/.test(value)) {
+      setEditedProcess((prev) => ({ ...prev, [id]: value === "" ? undefined : Number(value) }))
+    }
   }
 
   const handleSave = (id: number) => {
