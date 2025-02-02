@@ -1,5 +1,11 @@
 import { IProcesso } from "../IProcesso";
 
+type PageFaultData = {
+  id: number;
+  page_fault: number;
+  time: number;
+};
+
 export class MRUMemoryManager {
   public discSize: number;
   public discArray: (number | null)[];
@@ -14,6 +20,7 @@ export class MRUMemoryManager {
   public DISCOvsTempo: (number | null)[][];
   public tempo: number;
   private filaRAM: IProcesso[] = [];
+  public pageFaultvsTempo: (PageFaultData | null)[];
 
   constructor(ramSize: number, discSize: number, processos: IProcesso[]) {
     this.RAMSize = ramSize;
@@ -32,6 +39,8 @@ export class MRUMemoryManager {
     this.DISCOvsTempo = [];
     this.alocarDiscoTudo(processos);
     this.RAMvsTempo.push([...this.RAMArray]);
+
+    this.pageFaultvsTempo = [];
   }
 
   private registrarEstadoRAM(): void {
@@ -44,12 +53,16 @@ export class MRUMemoryManager {
 
   public alocarProcessoRAM(processo: IProcesso): void {
     if (!processo || processo.memoria !== "disco") {
+      this.pageFaultvsTempo.push({id: processo.id,page_fault: 0,time:this.tempo});
+      this.tempo++;
       this.registrarEstadoRAM();
       this.registrarEstadoDISCO();
       this.atualizar_fila(processo);
       return};
     
     if (this.freeRAMPages.length >= processo.tamanho) {
+      this.pageFaults++;
+      this.pageFaultvsTempo.push({id: processo.id,page_fault: 1,time:this.tempo});
       this.tempo++;
       this.filaRAM.push(processo);
       processo.indicePaginasAlocadas = [];
