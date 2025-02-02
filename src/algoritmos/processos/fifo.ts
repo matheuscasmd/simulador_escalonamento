@@ -79,5 +79,12 @@ export function fifo(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { 
 
     let average_turnaround = totalTurnaroundTime / n
 
-    return { output, average_turnaround , ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo};
+    const orderedOutput: number[][] = new Array(n);
+      
+    for (let i = 0; i < n; i++) {
+        orderedOutput[processes[i].id] = output[i];
+    }
+    orderedOutput.shift();
+
+    return { output: orderedOutput, average_turnaround , ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo};
 }
