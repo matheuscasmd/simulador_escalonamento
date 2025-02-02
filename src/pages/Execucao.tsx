@@ -1,5 +1,4 @@
 import { useEffect,useState } from 'react';
-import './App.css'
 import AlgoritmoForm from '../components/AlgoritmoForm';
 import { EsteiraExecucao } from '../components/EsteiraExecucao'
 import { IProcesso } from '../algoritmos/IProcesso';
