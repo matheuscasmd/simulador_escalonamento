@@ -308,7 +308,7 @@ export function Processos() {
                 <CardContent>
                   {renderInputs()}
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-primary">Memória RAM disponível: <span className='text-white'>{avaliable} MB</span></span>
+                    <span className="text-primary">Páginas disponíveis na RAM: <span className='text-white'>{avaliable} páginas</span></span>
                   </div>
                   <div className="flex justify-end space-x-4">
                     <Button onClick={reset} variant="outline" className="border-primary text-primary hover:scale-105">
