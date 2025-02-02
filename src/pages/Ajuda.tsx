@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Github, Info } from "lucide-react"
+import { Info } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 export function Ajuda() {
