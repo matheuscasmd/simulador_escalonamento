@@ -14,10 +14,10 @@ export function edf(processes_input: IProcesso[], quantum: number, preemptive: n
 
   let memoryManager;
   if(memoria === "FIFO"){
-      memoryManager = new FIFOMemoryManager(50,150,processes)
+      memoryManager = new FIFOMemoryManager(50,150,processes);
   }
   else {
-      memoryManager = new MRUMemoryManager(50,150,processes)
+      memoryManager = new MRUMemoryManager(50,150,processes);
   }
 
   while (counter < n && processes[counter].chegada <= current_time) {
