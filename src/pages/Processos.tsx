@@ -20,7 +20,7 @@ const infoProcesso: {
 ]
 
 const DISC_SIZE = 150
-const MAX_PAGINAS_POR_PROCESSO = 10 // Máximo de páginas por processo
+const MAX_PAGINAS_POR_PROCESSO = 10
 
 export function Processos() {
   const [processos, setProcessos] = useState<IProcesso[]>([])
