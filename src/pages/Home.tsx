@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react"
 import { Button } from "../components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
-
+import Logo from "../assets/Group.png"
 export function Welcome() {
   const router = useNavigate()
 
@@ -42,7 +42,7 @@ export function Welcome() {
       >
         <motion.div variants={itemVariants} className="flex flex-row items-center justify-center gap-4 w-full">
           <motion.img
-            src="src/assets/Group.png"
+            src={Logo}
             alt="logo"
             className="w-[300px]"
             initial={{ rotate: -180, scale: 0 }}

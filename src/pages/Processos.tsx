@@ -19,13 +19,16 @@ const infoProcesso: {
   { placeholder: "Deadline", label: "deadline", id: "deadline" },
 ]
 
+const RAM_SIZE = 50
+const MAX_PAGINAS_POR_PROCESSO = 10 // Máximo de páginas por processo
+
 export function Processos() {
   const [processos, setProcessos] = useState<IProcesso[]>([])
   const [currentProcesso, setCurrentProcesso] = useState<Partial<IProcesso>>({})
   const [editingProcessId, setEditingProcessId] = useState<number | null>(null)
   const [editedProcess, setEditedProcess] = useState<Partial<IProcesso>>({})
   const [currentPage, setCurrentPage] = useState(0)
-
+  const [avaliable, setAvaliable] = useState(RAM_SIZE)
 
   useEffect(() => {
     const storedProcessos = localStorage.getItem("processos")
@@ -34,11 +37,15 @@ export function Processos() {
     }
   }, [])
 
-  useEffect(() =>{
+  useEffect(() => {
+    let temp = 0
+    processos.forEach((processo) => {
+      temp += processo.tamanho
+    })
+    setAvaliable(RAM_SIZE - temp)
     localStorage.setItem("processos", JSON.stringify(processos))
-  },[processos])
+  }, [processos])
 
-  
   const router = useNavigate()
   const itemsPerPage = 5
   const totalPages = Math.ceil(processos.length / itemsPerPage)
@@ -51,16 +58,50 @@ export function Processos() {
     setProcessos([])
     setCurrentProcesso({})
     setCurrentPage(0)
+    setAvaliable(RAM_SIZE)
   }
 
   const handleChange = (id: string, value: string) => {
     if (/^\d*$/.test(value)) {
-      setCurrentProcesso((prev) => ({ ...prev, [id]: value === "" ? undefined : Number(value) }))
+      let numericValue = value === "" ? undefined : Number(value)
+
+      if (id === "tamanho" && numericValue !== undefined) {
+        const maxTamanho = Math.min(MAX_PAGINAS_POR_PROCESSO, avaliable)
+        if (numericValue > maxTamanho) {
+          numericValue = maxTamanho
+        }
+        if (numericValue < 1) {
+          numericValue = 1
+        }
+      }
+
+      if (
+        (id === "chegada" || id === "tempo") &&
+        numericValue !== undefined &&
+        numericValue < 1
+      ) {
+        numericValue = 1
+      }
+
+      // deadline pode ser 0
+      if (id === "deadline" && numericValue !== undefined && numericValue < 0) {
+        numericValue = 0
+      }
+
+      setCurrentProcesso((prev) => ({ ...prev, [id]: numericValue }))
     }
   }
 
   const addProcesso = () => {
-    if (Object.keys(currentProcesso).length >= 4) {
+    if (
+      Object.keys(currentProcesso).length >= 4 &&
+      currentProcesso.tamanho !== undefined &&
+      currentProcesso.tamanho > 0 &&
+      currentProcesso.tempo !== undefined &&
+      currentProcesso.tempo > 0 &&
+      currentProcesso.chegada !== undefined &&
+      currentProcesso.chegada > 0
+    ) {
       const newProcesso: IProcesso = {
         id: processos.length + 1,
         chegada: currentProcesso.chegada || 0,
@@ -76,13 +117,15 @@ export function Processos() {
       if (processos.length + 1 > itemsPerPage) {
         setCurrentPage(Math.floor(processos.length / itemsPerPage))
       }
+    } else {
+      alert("Todos os campos (exceto deadline) devem ser maiores que 0.")
     }
   }
 
   const renderInputs = () => {
     return infoProcesso.map((item) => (
       <div key={item.id} className="mb-4">
-        <Label htmlFor={item.id} className="block mb-2 text-white">
+        <Label htmlFor={item.id} className="block mb-2 text-primary">
           {item.placeholder}
         </Label>
         <Input
@@ -106,7 +149,34 @@ export function Processos() {
 
   const handleInputChange = (id: string, value: string) => {
     if (/^\d*$/.test(value)) {
-      setEditedProcess((prev) => ({ ...prev, [id]: value === "" ? undefined : Number(value) }))
+      let numericValue = value === "" ? undefined : Number(value)
+
+      // Cap 'tamanho' input during editing
+      if (id === "tamanho" && numericValue !== undefined) {
+        const originalProcess = processos.find((p) => p.id === editingProcessId)
+        const originalTamanho = originalProcess?.tamanho || 0
+        const maxTamanho = Math.min(MAX_PAGINAS_POR_PROCESSO, avaliable + originalTamanho)
+        if (numericValue > maxTamanho) {
+          numericValue = maxTamanho
+        }
+        if (numericValue < 1) {
+          numericValue = 1
+        }
+      }
+
+      if (
+        (id === "chegada" || id === "tempo") &&
+        numericValue !== undefined &&
+        numericValue < 1
+      ) {
+        numericValue = 1
+      }
+
+      if (id === "deadline" && numericValue !== undefined && numericValue < 0) {
+        numericValue = 0
+      }
+
+      setEditedProcess((prev) => ({ ...prev, [id]: numericValue }))
     }
   }
 
@@ -119,12 +189,10 @@ export function Processos() {
   const handleDelete = (id: number) => {
     setProcessos((prev) => {
       const updatedProcessos = prev.filter((proc) => proc.id !== id)
-      // Reindex the remaining processes
       const reindexedProcessos = updatedProcessos.map((proc, index) => ({
         ...proc,
         id: index + 1,
       }))
-      // Adjust current page if necessary
       if (currentPage > Math.floor((reindexedProcessos.length - 1) / itemsPerPage)) {
         setCurrentPage(Math.max(0, Math.floor((reindexedProcessos.length - 1) / itemsPerPage)))
       }
@@ -207,9 +275,6 @@ export function Processos() {
                     )}
                   </div>
                 ))}
-                <p className="mb-2 text-white">
-                  <span className="font-semibold text-primary">Finalizado:</span> {String(processo.finalizado)}
-                </p>
               </CardContent>
             </Card>
           ))}
@@ -238,10 +303,13 @@ export function Processos() {
             <div className="w-full flex flex-col gap-4 h-fit items-center justify-center">
               <Card className="bg-muted border-border w-full mt-28">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-primary">Adicionar Processo</CardTitle>
+                  <CardTitle className="text-primary mb-4">Registrar processo</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {renderInputs()}
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-primary">Memória RAM disponível: <span className='text-white'>{avaliable} MB</span></span>
+                  </div>
                   <div className="flex justify-end space-x-4">
                     <Button onClick={reset} variant="outline" className="border-primary text-primary hover:scale-105">
                       Resetar processos atuais
@@ -249,6 +317,7 @@ export function Processos() {
                     <Button
                       onClick={addProcesso}
                       className="bg-primary text-black hover:bg-primary/90"
+                      disabled={avaliable === 0}
                     >
                       Adicionar novo
                     </Button>
@@ -256,7 +325,7 @@ export function Processos() {
                 </CardContent>
               </Card>
               <Button onClick={goToAlgorithms} className="mb-4">
-                Algoritmos de escalonamento 
+                Algoritmos de escalonamento
               </Button>
             </div>
           </div>
