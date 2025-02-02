@@ -31,6 +31,11 @@ function Execucao() {
     setVelocidade(Number(e.target.value))
   }
 
+
+  const handleExecutar = (param : boolean) => {
+    setExecutar(param)
+  }
+
   useEffect(() => {
     const processosSalvos = localStorage.getItem("processos");
     if (processosSalvos) {
@@ -76,7 +81,7 @@ function Execucao() {
       <div className={`flex flex-col items-center justify-center w-full h-screen mx-auto ${output ? "pt-20" : ""} `}>
       <div className='flex flex-row w-full items-start pb-4'>
       <div className='flex flex-col w-full items-center gap-2'>
-      <AlgoritmoForm setExecutar={()=>setExecutar(!executar)}/>
+      <AlgoritmoForm setExecutar={handleExecutar}/>
       {executar && <div className="flex items-center gap-4 sticky left-0">
         <span className="text-[#00FF00] text-lg font-medium">Velocidade: </span>
         <select

@@ -13,8 +13,10 @@ interface ExecucaoData {
 }
 
 type ConfigFormProps = {
-  setExecutar(): void
+  setExecutar(param : boolean): void
 }
+
+
 
 export default function ConfigForm(props: ConfigFormProps) {
   const [isEditing, setIsEditing] = useState(true)
@@ -25,13 +27,17 @@ export default function ConfigForm(props: ConfigFormProps) {
     algoritmoMemoria: "FIFO",
   })
 
+  const forceReload = () => {
+    props.setExecutar(false)
+    setTimeout(() => {
+      props.setExecutar(true)
+    }, 1)
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Salvar o objeto config no localStorage
     localStorage.setItem('config', JSON.stringify(config))
-    
-    // Desativar o modo de edição
     setIsEditing(false)
   }
 
@@ -137,6 +143,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                   type="submit"
                   disabled={isSubmitDisabled}
                   className="bg-primary text-black hover:bg-primary/90 disabled:opacity-50"
+                  onClick={()=>props.setExecutar(true)}
                 >
                   Confirmar
                 </Button>
@@ -172,7 +179,9 @@ export default function ConfigForm(props: ConfigFormProps) {
               </div>
             </div>
           </CardContent>
-          <Button variant="outline" onClick={() => props.setExecutar()}>Executar</Button>
+          <div className="flex flex-row w-full justify-end p-4">
+          <Button variant="outline" className="text-primary bg-sidebar" onClick={forceReload}>Executar novamente</Button>
+          </div>
         </Card>
       )}
     </div>
