@@ -10,7 +10,17 @@ export function edf(processes_input: IProcesso[], quantum: number, preemptive: n
   let counter: number = 0;
   let readyQueue: number[] = [];
   let output: number[][] = Array.from({ length: n }, () => Array(10000).fill(-1));
-  let memoryManager = new FIFOMemoryManager(50, 150, processes);
+  let overheaded: boolean = false;
+  let readyQueue_tmp: number;
+  let ind:number;
+
+  let memoryManager;
+  if(memoria === "FIFO"){
+      memoryManager = new FIFOMemoryManager(50,150,processes);
+  }
+  else {
+      memoryManager = new MRUMemoryManager(50,150,processes);
+  }
 
   while (counter < n && processes[counter].chegada <= current_time) {
       readyQueue.push(counter);
@@ -21,15 +31,21 @@ export function edf(processes_input: IProcesso[], quantum: number, preemptive: n
       if (readyQueue.length === 0) {
           current_time++;
           while (counter < n && processes[counter].chegada <= current_time) {
-              readyQueue.push(counter);
-              counter++;
+              readyQueue.push(counter++);
           }
           continue;
       }
       
       readyQueue.sort((a, b) => (processes[a].deadline + processes[a].chegada) - (processes[b].deadline + processes[b].chegada));
+      if (overheaded){
+        readyQueue_tmp = readyQueue.filter((i)=>processes[i].chegada < current_time)[0];
+        ind = readyQueue.findIndex((v)=>v===readyQueue_tmp);
+        readyQueue.unshift(readyQueue[ind++]);
+        readyQueue = readyQueue.filter((_,i)=>i !== ind)
+      }
       let i = readyQueue.shift()!;
 
+      overheaded = false;
       if (!processes[i].finalizado) {
           memoryManager.alocarProcessoRAM(processes[i]);
           let executionTime = Math.min(processes[i].tempo, quantum);
@@ -49,6 +65,7 @@ export function edf(processes_input: IProcesso[], quantum: number, preemptive: n
           } else {
               for (let t = current_time; t < current_time + preemptive; t++) {
                   output[i][t] = 2;
+                  overheaded = true;
               }
               current_time += preemptive;
               readyQueue.push(i);
