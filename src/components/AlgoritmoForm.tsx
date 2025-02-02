@@ -8,12 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 interface ExecucaoData {
   sobrecarga: number
   quantum: number
-  algoritmoProcessos: string
   algoritmoMemoria: string
 }
 
 type ConfigFormProps = {
   setExecutar(): void
+  executar : boolean
 }
 
 export default function ConfigForm(props: ConfigFormProps) {
@@ -21,7 +21,6 @@ export default function ConfigForm(props: ConfigFormProps) {
   const [config, setConfig] = useState<ExecucaoData>({
     sobrecarga: 0,
     quantum: 0,
-    algoritmoProcessos: "FIFO",
     algoritmoMemoria: "FIFO",
   })
 
@@ -38,7 +37,7 @@ export default function ConfigForm(props: ConfigFormProps) {
   const isSubmitDisabled = config.sobrecarga === 0 || config.quantum === 0
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className={`w-full max-w-2xl mx-auto ${props.executar ? "mt-60" : "" }`}>
       {isEditing ? (
         <Card className="bg-muted border-border w-full">
           <CardHeader>
@@ -84,26 +83,6 @@ export default function ConfigForm(props: ConfigFormProps) {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="algoritmoProcessos" className="text-primary">
-                    Algoritmo de Processos
-                  </Label>
-                  <Select
-                    value={config.algoritmoProcessos}
-                    onValueChange={(value) => setConfig({ ...config, algoritmoProcessos: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o algoritmo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="FIFO">FIFO</SelectItem>
-                      <SelectItem value="EDF">EDF</SelectItem>
-                      <SelectItem value="RR">RR</SelectItem>
-                      <SelectItem value="SJF">SJF</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid gap-2">
                   <Label htmlFor="algoritmoMemoria" className="text-primary">
                     Algoritmo de Memória
                   </Label>
@@ -126,7 +105,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                 <Button
                   type="button"
                   onClick={() =>
-                    setConfig({ sobrecarga: 0, quantum: 0, algoritmoProcessos: "FIFO", algoritmoMemoria: "FIFO" })
+                    setConfig({ sobrecarga: 0, quantum: 0, algoritmoMemoria: "FIFO" })
                   }
                   variant="outline"
                   className="border-primary text-primary hover:scale-105"
@@ -153,7 +132,7 @@ export default function ConfigForm(props: ConfigFormProps) {
             </Button>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-4 w-full justify-between">
               <div>
                 <Label className="font-medium text-primary">Sobrecarga</Label>
                 <p className="text-muted-foreground">{config.sobrecarga}</p>
@@ -162,17 +141,16 @@ export default function ConfigForm(props: ConfigFormProps) {
                 <Label className="font-medium text-primary">Quantum</Label>
                 <p className="text-muted-foreground">{config.quantum}</p>
               </div>
-              <div>
-                <Label className="font-medium text-primary">Algoritmo de Processos</Label>
-                <p className="text-muted-foreground">{config.algoritmoProcessos}</p>
-              </div>
+              
               <div>
                 <Label className="font-medium text-primary">Algoritmo de Memória</Label>
                 <p className="text-muted-foreground">{config.algoritmoMemoria}</p>
               </div>
             </div>
           </CardContent>
-          <Button variant="outline" onClick={() => props.setExecutar()}>Executar</Button>
+          <div className="flex items-end justify-end pr-2 pb-2">
+          <Button variant="outline" onClick={() => props.setExecutar()}>{props.executar ? "Parar" : "Executar"}</Button>
+          </div>
         </Card>
       )}
     </div>

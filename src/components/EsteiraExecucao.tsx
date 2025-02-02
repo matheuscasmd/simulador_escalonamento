@@ -56,7 +56,7 @@ export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucao
       
 
       {/* Renderização da Lista de Processos */}
-      <div className="min-w-max">
+      <div className="min-w-max w-full">
         {lista.map((processo, index) => (
           <div key={index} className="flex flex-col space-y-2 mb-6">
             <span className="text-[#00FF00] font-medium text-lg">Processo {index + 1}</span>

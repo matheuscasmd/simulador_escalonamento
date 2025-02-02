@@ -1,4 +1,4 @@
-import { Home, Settings, History, RotateCcw,CircleHelp, Play } from 'lucide-react'
+import { History, RotateCcw,CircleHelp, Play } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
