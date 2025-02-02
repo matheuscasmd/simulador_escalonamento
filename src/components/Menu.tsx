@@ -32,7 +32,7 @@ export function Menu() {
     <SidebarProvider className='w-fit pt-4 text-white '>
       <Sidebar className='max-w-21 border-none bg-white'>
         <SidebarHeader className='w-full flex flex-row items-center text-left justify-start bg-sidebarItem cursor-pointer' onClick={()=>router("/home")}>
-          <img src="src\assets\Group.png" alt="logo" className='w-16'/>
+          <img src="..\..\src\assets\Group.png" alt="logo" className='w-16'/>
           <span className="text-5xl font-semibold tracking-tight">SO<span className='text-lg'>Simulator</span></span>
         </SidebarHeader>
         <SidebarContent className='bg-sidebarItem'>
