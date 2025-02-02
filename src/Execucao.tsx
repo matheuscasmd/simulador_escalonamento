@@ -8,6 +8,8 @@ import { MemoriaCard } from './components/Memoria';
 import { edf } from './algoritmos/processos/edf';
 import { rr } from './algoritmos/processos/roundrobin';
 import { sjf } from './algoritmos/processos/sjf';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
+import { Card, CardContent, CardTitle } from './components/ui/card';
 
 
 
@@ -93,7 +95,37 @@ function Execucao() {
       </div>
       {executar && RAMvsTempo && DiscovsTempo && <MemoriaCard RAMvsTempo={RAMvsTempo.slice(1)} DISCOvsTempo={DiscovsTempo.slice(1)} velocidade={velocidade}/>}
       </div>
-      {executar &&  output && turnaround && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
+      {executar &&  output && turnaround && 
+      <Tabs defaultValue='execucao' className='w-full px-20'>
+        <TabsList>
+          <TabsTrigger value='execucao'>Execução</TabsTrigger>
+          <TabsTrigger value='processos'>Processos</TabsTrigger>
+        </TabsList>
+        <TabsContent value='execucao'>
+        <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />
+        </TabsContent>
+        <TabsContent value='processos' className='flex flex-row flex-wrap gap-2'>
+            {
+              processos.map((item,index)=>(
+              <Card className='border-border text-[#00FF00]'>
+                <CardTitle className='text-center my-2'>
+                  Processo {index + 1}
+                  </CardTitle>
+                <CardContent>
+                  
+                    <p>Tempo de chegada: <span className='text-white'>{item.chegada}</span> </p>
+                    <p>Tempo necessário: <span className='text-white'>{item.tempo}</span> </p>
+                    <p>Deadline: <span className='text-white'>{item.deadline}</span> </p>
+                    <p>Tamanho: <span className='text-white'>{item.tamanho} páginas</span> </p>
+                </CardContent>
+              </Card>
+
+              ))
+            }
+
+        </TabsContent>
+      </Tabs>
+}
       </div>
   )
 }

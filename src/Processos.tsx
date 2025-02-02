@@ -22,7 +22,6 @@ const infoProcesso: {
 export function Processos() {
   const [processos, setProcessos] = useState<IProcesso[]>([])
   const [currentProcesso, setCurrentProcesso] = useState<Partial<IProcesso>>({})
-  const [maxProcessos, setMaxProcessos] = useState<number>(10)
   const [editingProcessId, setEditingProcessId] = useState<number | null>(null)
   const [editedProcess, setEditedProcess] = useState<Partial<IProcesso>>({})
   const [currentPage, setCurrentPage] = useState(0)
@@ -245,7 +244,6 @@ export function Processos() {
                     </Button>
                     <Button
                       onClick={addProcesso}
-                      disabled={processos.length >= maxProcessos}
                       className="bg-primary text-black hover:bg-primary/90"
                     >
                       Adicionar novo
