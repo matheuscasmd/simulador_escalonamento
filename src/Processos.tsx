@@ -33,7 +33,7 @@ export function Processos() {
     setCurrentProcesso({});
   };
   const handleChange = (id: string, value: string) => {
-    setCurrentProcesso((prev) => ({ ...prev, [id]: value === "" ? undefined : Number(value) }));
+    setCurrentProcesso((prev) => (isNaN(Number(value))? prev : { ...prev, [id]: value === "" ? undefined : Number(value) }));
   };
 
 
