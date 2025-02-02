@@ -76,7 +76,7 @@ export function Processos() {
       }
 
       if (
-        (id === "chegada" || id === "tempo") &&
+        (id === "tempo") &&
         numericValue !== undefined &&
         numericValue < 1
       ) {
@@ -165,7 +165,7 @@ export function Processos() {
       }
 
       if (
-        (id === "chegada" || id === "tempo") &&
+        (id === "tempo") &&
         numericValue !== undefined &&
         numericValue < 1
       ) {
