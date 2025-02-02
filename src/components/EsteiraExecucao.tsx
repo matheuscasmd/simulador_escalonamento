@@ -48,11 +48,13 @@ export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucao
         return "Deadline Excedido"
       case "5":
         return "Ausente"
+      default:
+        return "Ausente"
     }
   }
 
   return (
-    <Card className="bg-[#1A1A1A] border border-[#333333] rounded-lg flex flex-col space-y-4 p-6 w-full mx-40 overflow-x-auto">
+    <Card className="bg-[#1A1A1A] border-none rounded-lg flex flex-col p-6 w-full overflow-x-auto">
       {/* Seletor de Velocidade */}
       
 

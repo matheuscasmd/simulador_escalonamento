@@ -58,7 +58,7 @@ export function MemoriaCard({ RAMvsTempo, DISCOvsTempo, velocidade }: MemoriaCar
     return <p>Carregando memória...</p>;
   }
   return (
-    <Card className="bg-muted border-border w-full max-w-[1000px] mx-auto">
+    <Card className="bg-muted border-border w-full max-w-[1000px] mx-auto mr-20">
       <CardHeader>
         <CardTitle className="text-primary flex">Memória</CardTitle>
       </CardHeader>

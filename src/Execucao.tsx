@@ -72,8 +72,8 @@ function Execucao() {
   }
   
   return (
-      <div className='flex flex-col items-center justify-center w-full pr-80 pl-10'>
-      <div className='flex flex-row w-full items-start pb-4 gap-4'>
+      <div className={`flex flex-col items-center justify-center w-full h-screen mx-auto ${output ? "pt-20" : ""} `}>
+      <div className='flex flex-row w-full items-start pb-4'>
       <div className='flex flex-col w-full items-center gap-2'>
       <AlgoritmoForm setExecutar={()=>setExecutar(!executar)}/>
       {executar && <div className="flex items-center gap-4 sticky left-0">
