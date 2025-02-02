@@ -3,6 +3,7 @@ import App from "./App";
 import Execucao from "./pages/Execucao";
 import { Processos } from "./pages/Processos";
 import { Welcome } from "./pages/Home";
+import { Ajuda } from "./pages/Ajuda";
 
 const AppRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
         <Route path="/app" element={<App />}>
           <Route path="execucao" element={<Execucao />} />
           <Route path="processos" element={<Processos />} />
+          <Route path="ajuda" element={<Ajuda/>}/>
         </Route>
         <Route path="*" element={<p>Essa página não existe</p>} />
       </Routes>

@@ -17,7 +17,6 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 const menuItems = [
-  { icon: Home, label: "Home", tooltip: "Página inicial", url: "/home" },
   { icon: CircleHelp, label: "Ajuda", tooltip: "Acessar a documentação", url: "/app/ajuda"},
   { icon: RotateCcw, label: "Processos", tooltip: "Reiniciar a entrada de dados", url: "/app/processos" },
   { icon: Play, label: "Execução", tooltip: "Escolha de algoritmos de escalonamento e execução", url: "/app/execucao" },
