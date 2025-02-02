@@ -49,7 +49,7 @@ export function MemoriaCard({ RAMvsTempo, DISCOvsTempo, velocidade }: MemoriaCar
           className={`w-6 h-6 border border-[#333333] rounded-[4px] flex items-center justify-center
             ${slot.id === null ? "bg-transparent" : isRam ? "bg-green-500" : "bg-purple-500"}`}
         >
-          {slot.id !== null && <span className="text-white text-[8px] font-bold">{slot.id}</span>}
+          {slot.id !== null && <span className="text-white text-[15px] font-bold">{slot.id}</span>}
         </div>
       ))}
     </div>
@@ -58,7 +58,7 @@ export function MemoriaCard({ RAMvsTempo, DISCOvsTempo, velocidade }: MemoriaCar
     return <p>Carregando memória...</p>;
   }
   return (
-    <Card className="bg-muted border-border w-full max-w-[1000px] mx-auto">
+    <Card className="bg-muted border-border w-full max-w-[1000px] mx-auto mr-20">
       <CardHeader>
         <CardTitle className="text-primary flex">Memória</CardTitle>
       </CardHeader>

@@ -1,7 +1,8 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
+import { MRUMemoryManager } from "../memoria/mru";
 
-export function sjf(processes_input: IProcesso[]): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
+export function sjf(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
   let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
   let n = processes.length;
   let completed = 0;
@@ -9,7 +10,13 @@ export function sjf(processes_input: IProcesso[]): { output: number[][], average
   let totalTurnaroundTime = 0;
 
   let completedProcesses: IProcesso[] = [];
-  let memoryManager = new FIFOMemoryManager(50, 150, processes);
+  let memoryManager;
+  if (memoria === "FIFO") {
+      memoryManager = new FIFOMemoryManager(50, 150, processes);
+  } else {
+      memoryManager = new MRUMemoryManager(50, 150, processes);
+  }
+
 
   while (completed < n) {
       let ready = processes.filter(p => p.chegada <= current_time && !p.finalizado);

@@ -1,7 +1,9 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
+import { MRUMemoryManager } from "../memoria/mru";
 
-export function fifo(processes_input: IProcesso[]): { output: number[][], average_turnaround: number, ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
+//passar como parametro memoria : "FIFO" | "MRU"
+export function fifo(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number, ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
     let processes = processes_input.map(p => ({ ...p }));
     let n = processes.length;
     let completed = 0;
@@ -9,7 +11,14 @@ export function fifo(processes_input: IProcesso[]): { output: number[][], averag
     let totalTurnaroundTime = 0;
 
     let completedProcesses: IProcesso[] = [];
-    const memoryManager = new FIFOMemoryManager(50, 150, processes);
+
+    let memoryManager;
+    if(memoria === "FIFO"){
+        memoryManager = new FIFOMemoryManager(50,150,processes)
+    }
+    else {
+        memoryManager = new MRUMemoryManager(50,150,processes)
+    }
 
     processes.sort((a, b) => a.chegada - b.chegada);
 
@@ -70,5 +79,12 @@ export function fifo(processes_input: IProcesso[]): { output: number[][], averag
 
     let average_turnaround = totalTurnaroundTime / n
 
-    return { output, average_turnaround , ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo};
+    const orderedOutput: number[][] = new Array(n);
+      
+    for (let i = 0; i < n; i++) {
+        orderedOutput[processes[i].id] = output[i];
+    }
+    orderedOutput.shift();
+
+    return { output: orderedOutput, average_turnaround , ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo};
 }

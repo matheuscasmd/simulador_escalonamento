@@ -73,10 +73,11 @@ export function Welcome() {
         <motion.div variants={itemVariants}>
           <Button
             onClick={() => router("/app/processos",{replace : true})}
-            className="mt-8 bg-white/10 hover:bg-white/20 text-white border border-[#00FF00]/50 hover:border-[#00FF00] transition-all duration-300 group"
+            size="lg"
+            className="mt-8 bg-white/10 hover:bg-white/20 text-white border border-[#00FF00]/50 hover:border-[#00FF00] transition-all duration-300 group text-lg"
           >
             Conhecer
-            <ArrowRight className="ml-2 w-4 h-4 text-[#00FF00] group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="ml-1 w-6 h-6 text-[#00FF00] group-hover:translate-x-1 transition-transform" />
           </Button>
         </motion.div>
       </motion.div>

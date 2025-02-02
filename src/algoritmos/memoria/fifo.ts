@@ -94,7 +94,7 @@ export class FIFOMemoryManager {
         this.freeRAMPages.push(pagina);
       }
     });
-
+    this.freeRAMPages.sort((a, b) => a - b);
     processo.memoria = "disco";
     processo.indicePaginasAlocadas = [];
   }

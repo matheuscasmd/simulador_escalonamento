@@ -8,6 +8,8 @@ import { MemoriaCard } from './components/Memoria';
 import { edf } from './algoritmos/processos/edf';
 import { rr } from './algoritmos/processos/roundrobin';
 import { sjf } from './algoritmos/processos/sjf';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
+import { Card, CardContent, CardTitle } from './components/ui/card';
 
 
 
@@ -24,7 +26,7 @@ function Execucao() {
   const [quantum,setQuantum] = useState<number>(0)
   const [sobrecarga,setSobrecarga] = useState<number>(0)
   const [turnaround,setTurnaround] = useState(0)
-  // const [algoritmoMemoria,setAlgoritmoProcessos] = useState()
+  const [algoritmoMemoria,setAlgoritmoMemoria] = useState<"FIFO" | "MRU">("FIFO")
 
   const handleVelocidadeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setVelocidade(Number(e.target.value))
@@ -50,6 +52,7 @@ function Execucao() {
       setDiscovsTempo(algoritmo.discoHistory)
       setRAMvsTempo(algoritmo.ramHistory)
       setTurnaround(algoritmo.average_turnaround)
+      setAlgoritmoMemoria(parsed.algoritmoMemoria)
     }
     if (processosSalvos) setProcessos(JSON.parse(processosSalvos));
   }, [executar]);
@@ -60,19 +63,19 @@ function Execucao() {
   function getProcessosAlgoritmo(alg : "FIFO" | "EDF" | "RR" | "SJF"){
     switch(alg){
       case "FIFO":
-        return fifo(processos)
+        return fifo(processos,algoritmoMemoria)
       case "EDF":
-        return edf(processos,quantum,sobrecarga)
+        return edf(processos,quantum,sobrecarga,algoritmoMemoria)
       case "RR":
-        return rr(processos,quantum,sobrecarga)
+        return rr(processos,quantum,sobrecarga,algoritmoMemoria)
       case "SJF":
-        return sjf(processos)
+        return sjf(processos,algoritmoMemoria)
     }
   }
   
   return (
-      <div className='flex flex-col items-center justify-center w-full pr-80 pl-10'>
-      <div className='flex flex-row w-full items-start pb-4 gap-4'>
+      <div className={`flex flex-col items-center justify-center w-full h-screen mx-auto ${output ? "pt-20" : ""} `}>
+      <div className='flex flex-row w-full items-start pb-4'>
       <div className='flex flex-col w-full items-center gap-2'>
       <AlgoritmoForm setExecutar={()=>setExecutar(!executar)}/>
       {executar && <div className="flex items-center gap-4 sticky left-0">
@@ -92,7 +95,37 @@ function Execucao() {
       </div>
       {executar && RAMvsTempo && DiscovsTempo && <MemoriaCard RAMvsTempo={RAMvsTempo.slice(1)} DISCOvsTempo={DiscovsTempo.slice(1)} velocidade={velocidade}/>}
       </div>
-      {executar &&  output && turnaround && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
+      {executar &&  output && turnaround && 
+      <Tabs defaultValue='execucao' className='w-full px-20'>
+        <TabsList>
+          <TabsTrigger value='execucao'>Execução</TabsTrigger>
+          <TabsTrigger value='processos'>Processos</TabsTrigger>
+        </TabsList>
+        <TabsContent value='execucao'>
+        <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />
+        </TabsContent>
+        <TabsContent value='processos' className='flex flex-row flex-wrap gap-2'>
+            {
+              processos.map((item,index)=>(
+              <Card className='border-border text-[#00FF00]'>
+                <CardTitle className='text-center my-2'>
+                  Processo {index + 1}
+                  </CardTitle>
+                <CardContent>
+                  
+                    <p>Tempo de chegada: <span className='text-white'>{item.chegada}</span> </p>
+                    <p>Tempo necessário: <span className='text-white'>{item.tempo}</span> </p>
+                    <p>Deadline: <span className='text-white'>{item.deadline}</span> </p>
+                    <p>Tamanho: <span className='text-white'>{item.tamanho} páginas</span> </p>
+                </CardContent>
+              </Card>
+
+              ))
+            }
+
+        </TabsContent>
+      </Tabs>
+}
       </div>
   )
 }

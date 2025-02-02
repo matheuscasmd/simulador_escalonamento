@@ -19,7 +19,6 @@ const estadoCores: Record<number, string> = {
   4: "bg-purple-500",
   3: "bg-yellow-500",
   5: "bg-[#2A2A2A]",
-  6: "bg-gray-500",
 }
 
 
@@ -37,9 +36,25 @@ export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucao
     return () => clearInterval(interval)
   }, [lista, velocidade])
 
+  const estadoTexto = (estado: string): string => {
+    switch (estado) {
+      case "1":
+        return "Executando"
+      case "2":
+        return "Sobrecarga"
+      case "3":
+        return "Espera"
+      case "4":
+        return "Deadline Excedido"
+      case "5":
+        return "Ausente"
+      default:
+        return "Ausente"
+    }
+  }
 
   return (
-    <Card className="bg-[#1A1A1A] border border-[#333333] rounded-lg flex flex-col space-y-4 p-6 w-full mx-40 overflow-x-auto">
+    <Card className="bg-[#1A1A1A] border-none rounded-lg flex flex-col p-6 w-full overflow-x-auto">
       {/* Seletor de Velocidade */}
       
 
@@ -71,12 +86,12 @@ export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucao
         {Object.entries(estadoCores).map(([estado, cor]) => (
           <div key={estado} className="flex items-center gap-2">
             <div className={`w-6 h-6 ${cor} opacity-90 rounded-[4px] border border-[#333333]`} />
-            <span className="text-[#00FF00] font-medium capitalize text-lg">{estado}</span>
+            <span className="text-[#00FF00] font-medium capitalize text-lg">{estadoTexto(estado)}</span>
           </div>
         ))}
       </div>
       <div>
-        <p className="text-lg text-[#00FF00]">Turnaround: {turnaround} </p>
+        <p className="text-lg text-[#00FF00]">Turnaround: {turnaround.toFixed(2)} </p>
       </div>
     </Card>
   )

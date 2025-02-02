@@ -1,10 +1,7 @@
-"use client"
-
-import { Home, Settings, History, RotateCcw,CircleHelp } from 'lucide-react'
+import { Home, Settings, History, RotateCcw,CircleHelp, Play } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
@@ -22,8 +19,9 @@ import { useNavigate } from 'react-router-dom'
 const menuItems = [
   { icon: Home, label: "Home", tooltip: "Página inicial", url: "/home" },
   { icon: CircleHelp, label: "Ajuda", tooltip: "Acessar a documentação", url: "/app/ajuda"},
-  { icon: RotateCcw, label: "Reiniciar entradas", tooltip: "Reiniciar a entrada de dados", url: "/app/processos" },
-  { icon: History, label: "Histórico de execução", tooltip: "Ver histórico de execuções", url: "/app/historico" },
+  { icon: RotateCcw, label: "Processos", tooltip: "Reiniciar a entrada de dados", url: "/app/processos" },
+  { icon: Play, label: "Execução", tooltip: "Escolha de algoritmos de escalonamento e execução", url: "/app/execucao" },
+  { icon: History, label: "Histórico de execução", tooltip: "Ver histórico de execuções", url: "/app/historico"},
 ]
 
 export function Menu() {
@@ -32,7 +30,7 @@ export function Menu() {
     <SidebarProvider className='w-fit pt-4 text-white '>
       <Sidebar className='max-w-21 border-none bg-white'>
         <SidebarHeader className='w-full flex flex-row items-center text-left justify-start bg-sidebarItem cursor-pointer' onClick={()=>router("/home")}>
-          <img src="src\assets\Group.png" alt="logo" className='w-16'/>
+          <img src="..\..\src\assets\Group.png" alt="logo" className='w-16'/>
           <span className="text-5xl font-semibold tracking-tight">SO<span className='text-lg'>Simulator</span></span>
         </SidebarHeader>
         <SidebarContent className='bg-sidebarItem'>
