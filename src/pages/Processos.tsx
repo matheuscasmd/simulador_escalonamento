@@ -19,7 +19,7 @@ const infoProcesso: {
   { placeholder: "Deadline", label: "deadline", id: "deadline" },
 ]
 
-const RAM_SIZE = 50
+const DISC_SIZE = 150
 const MAX_PAGINAS_POR_PROCESSO = 10 // Máximo de páginas por processo
 
 export function Processos() {
@@ -28,7 +28,7 @@ export function Processos() {
   const [editingProcessId, setEditingProcessId] = useState<number | null>(null)
   const [editedProcess, setEditedProcess] = useState<Partial<IProcesso>>({})
   const [currentPage, setCurrentPage] = useState(0)
-  const [avaliable, setAvaliable] = useState(RAM_SIZE)
+  const [avaliable, setAvaliable] = useState(DISC_SIZE)
 
   useEffect(() => {
     const storedProcessos = localStorage.getItem("processos")
@@ -42,7 +42,7 @@ export function Processos() {
     processos.forEach((processo) => {
       temp += processo.tamanho
     })
-    setAvaliable(RAM_SIZE - temp)
+    setAvaliable(DISC_SIZE - temp)
     localStorage.setItem("processos", JSON.stringify(processos))
   }, [processos])
 
@@ -58,7 +58,7 @@ export function Processos() {
     setProcessos([])
     setCurrentProcesso({})
     setCurrentPage(0)
-    setAvaliable(RAM_SIZE)
+    setAvaliable(DISC_SIZE)
   }
 
   const handleChange = (id: string, value: string) => {
@@ -332,7 +332,7 @@ export function Processos() {
         </div>
       </div>
       {processos.length > 0 && (
-        <div className="w-full mt-2">
+        <div className="w-full mt-2 pb-4">
           {renderProcessos()}
         </div>
       )}
