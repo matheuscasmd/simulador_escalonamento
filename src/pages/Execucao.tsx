@@ -106,7 +106,7 @@ function Execucao() {
           </div>
           <div className='flex flex-col w-full items-center gap-4 mx-4'>
             
-      {executar && RAMvsTempo && DiscovsTempo && <MemoriaCard RAMvsTempo={RAMvsTempo.slice(1)} DISCOvsTempo={DiscovsTempo.slice(1)} velocidade={velocidade}/>}
+      {executar && output && RAMvsTempo && DiscovsTempo && <MemoriaCard RAMvsTempo={RAMvsTempo.slice(1)} DISCOvsTempo={DiscovsTempo.slice(1)} velocidade={velocidade}/>}
       {executar &&  output && turnaround && pageFaults &&
       <div className='w-full flex flex-row justify-evenly'>
       

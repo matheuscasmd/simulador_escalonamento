@@ -13,10 +13,8 @@ interface ExecucaoData {
 }
 
 type ConfigFormProps = {
-  setExecutar(param : boolean): void
+  setExecutar(param: boolean): void
 }
-
-
 
 export default function ConfigForm(props: ConfigFormProps) {
   const [isEditing, setIsEditing] = useState(true)
@@ -27,7 +25,7 @@ export default function ConfigForm(props: ConfigFormProps) {
     algoritmoMemoria: "FIFO",
   })
 
-  useEffect(()=>{},[config])
+  useEffect(() => {}, [config])
 
   const forceReload = () => {
     props.setExecutar(false)
@@ -38,9 +36,15 @@ export default function ConfigForm(props: ConfigFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    
     localStorage.setItem('config', JSON.stringify(config))
     setIsEditing(false)
+  }
+
+  const handleChange = (field: keyof ExecucaoData, value: string | number) => {
+    setConfig(prevConfig => ({
+      ...prevConfig,
+      [field]: value
+    }))
   }
 
   const isSubmitDisabled = config.sobrecarga === 0 || config.quantum === 0
@@ -69,7 +73,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                         e.preventDefault()
                       }
                     }}
-                    onChange={(e) => setConfig({ ...config, sobrecarga: Number(e.target.value) })}
+                    onChange={(e) => handleChange('sobrecarga', Number(e.target.value))}
                   />
                 </div>
 
@@ -87,7 +91,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                         e.preventDefault()
                       }
                     }}
-                    onChange={(e) => setConfig({ ...config, quantum: Number(e.target.value) })}
+                    onChange={(e) => handleChange('quantum', Number(e.target.value))}
                   />
                 </div>
 
@@ -97,7 +101,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                   </Label>
                   <Select
                     value={config.algoritmoProcessos}
-                    onValueChange={(value) => setConfig({ ...config, algoritmoProcessos: value })}
+                    onValueChange={(value) => handleChange('algoritmoProcessos', value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o algoritmo" />
@@ -117,7 +121,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                   </Label>
                   <Select
                     value={config.algoritmoMemoria}
-                    onValueChange={(value) => setConfig({ ...config, algoritmoMemoria: value })}
+                    onValueChange={(value) => handleChange('algoritmoMemoria', value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o algoritmo" />
@@ -160,7 +164,7 @@ export default function ConfigForm(props: ConfigFormProps) {
             <Button variant="ghost" size="icon" onClick={() => {
               setIsEditing(true)
               props.setExecutar(false)
-              }}>
+            }}>
               <Pencil className="h-4 w-4" />
             </Button>
           </CardHeader>
@@ -185,7 +189,7 @@ export default function ConfigForm(props: ConfigFormProps) {
             </div>
           </CardContent>
           <div className="flex flex-row w-full justify-end p-4">
-          <Button variant="outline" className="text-primary bg-sidebar" onClick={forceReload}>Executar novamente</Button>
+            <Button variant="outline" className="text-primary bg-sidebar" onClick={forceReload}>Executar novamente</Button>
           </div>
         </Card>
       )}
