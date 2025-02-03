@@ -17,7 +17,7 @@ export function Ajuda() {
           <div className="space-y-4">
             <div>
               <p className="text-muted-foreground mt-2">
-                Este projeto é um simulador de escalonamento de processos e gerenciamento de memória. Ele permite
+                Este projeto é um simulador de escalonamento de processos e substituição de páginas de memória. Ele permite
                 visualizar e entender como diferentes algoritmos funcionam em um sistema operacional.
               </p>
             </div>
@@ -26,7 +26,7 @@ export function Ajuda() {
               <Label className="text-lg font-medium text-primary">Funcionalidades Principais</Label>
               <ul className="list-disc list-inside text-muted-foreground mt-2">
                 <li>Simulação de algoritmos de escalonamento de processos</li>
-                <li>Simulação de algoritmos de gerenciamento de memória</li>
+                <li>Simulação de algoritmos de substituição de páginas de memória</li>
                 <li>Interface interativa para configuração de parâmetros</li>
                 <li>Visualização em tempo real dos resultados da simulação</li>
               </ul>

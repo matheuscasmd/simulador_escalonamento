@@ -87,9 +87,7 @@ function Execucao() {
       case "EDF":
         return edf(processos,quantum,sobrecarga,algoritmoMemoria)
       case "RR":
-        return rr(processos,quantum,sobrecarga)
-
-        // return rr(processos,quantum,sobrecarga,algoritmoMemoria)
+        return rr(processos,quantum,sobrecarga,algoritmoMemoria)
       case "SJF":
         return sjf(processos,algoritmoMemoria)
     }

@@ -1,8 +1,9 @@
 import { PageFaultData } from "../IPageFaultData";
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
+import { MRUMemoryManager } from "../memoria/mru";
 
-export function rr(processes_input: IProcesso[], quantum: number, preemptive: number): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[]  } {
+export function rr(processes_input: IProcesso[], quantum: number, preemptive: number,memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[]  } {
     let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
 
     let n = processes.length;
@@ -14,7 +15,13 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
     let readyQueue: number[] = [];
     let output: number[][] = [];
     let memoryManager;
-    memoryManager = new FIFOMemoryManager(50,150,processes)
+    if(memoria === "FIFO"){
+        memoryManager = new FIFOMemoryManager(50,150,processes)
+    }
+    else {
+        memoryManager = new MRUMemoryManager(50,150,processes)
+    }
+  
     
    
 
