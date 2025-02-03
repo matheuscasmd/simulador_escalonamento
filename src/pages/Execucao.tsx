@@ -29,6 +29,7 @@ function Execucao() {
   const [sobrecarga,setSobrecarga] = useState<number>(0)
   const [turnaround,setTurnaround] = useState(0)
   const [algoritmoMemoria,setAlgoritmoMemoria] = useState<"FIFO" | "MRU">("FIFO")
+  const [algoritmoProcessos,setAlgoritmoProcessos] = useState<"FIFO" | "SJF" | "EDF" | "RR">("FIFO")
   
   const handleVelocidadeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setVelocidade(Number(e.target.value))
@@ -49,23 +50,17 @@ function Execucao() {
 
   useEffect(() => {
     const processosSalvos = localStorage.getItem('processos');
-    const config = localStorage.getItem("config")
-    if(config){
-      const parsed = JSON.parse(config)
-      const algoritmo = getProcessosAlgoritmo(parsed.algoritmoProcessos)
-      setQuantum(Number(parsed.quantum))
-      setSobrecarga(Number(parsed.sobrecarga))
-      setOutput(algoritmo.output)
-      setDiscovsTempo(algoritmo.discoHistory)
-      setRAMvsTempo(algoritmo.ramHistory)
-      setTurnaround(algoritmo.average_turnaround)
-      setPageFaults(algoritmo.pagefaults)
-      setAlgoritmoMemoria(parsed.algoritmoMemoria)
-    }
     if (processosSalvos) setProcessos(JSON.parse(processosSalvos));
   }, [executar]);
 
 
+  useEffect(()=>{
+    setOutput(getProcessosAlgoritmo(algoritmoProcessos).output)
+    setTurnaround(getProcessosAlgoritmo(algoritmoProcessos).average_turnaround)
+    setDiscovsTempo(getProcessosAlgoritmo(algoritmoProcessos).discoHistory)
+    setRAMvsTempo(getProcessosAlgoritmo(algoritmoProcessos).ramHistory)
+    setPageFaults(getProcessosAlgoritmo(algoritmoProcessos).pagefaults)
+  },[algoritmoProcessos])
     
 
   function getProcessosAlgoritmo(alg : "FIFO" | "EDF" | "RR" | "SJF"){
@@ -85,7 +80,13 @@ function Execucao() {
       <div className={`flex flex-col items-center justify-center w-full h-screen mx-auto ${output ? "pt-20" : ""} `}>
         <div className='flex flex-row w-full items-start pb-4'>
           <div className='flex flex-col w-full items-center gap-4 mx-4'>
-            <AlgoritmoForm setExecutar={handleExecutar}/>
+            <AlgoritmoForm
+            config={{sobrecarga,quantum,algoritmoProcessos,algoritmoMemoria}}
+             setExecutar={handleExecutar}
+             setAlgoritmoMemoria={setAlgoritmoMemoria}
+             setAlgoritmoProcessos={setAlgoritmoProcessos}
+             setQuantum={setQuantum}
+             setSobrecarga={setSobrecarga}/>
             <div className='max-w-4xl'>
            {output && executar && turnaround && sobrecarga && quantum && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
             </div>
