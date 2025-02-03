@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -26,6 +26,8 @@ export default function ConfigForm(props: ConfigFormProps) {
     algoritmoProcessos: "FIFO",
     algoritmoMemoria: "FIFO",
   })
+
+  useEffect(()=>{},[config])
 
   const forceReload = () => {
     props.setExecutar(false)
@@ -143,7 +145,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                   type="submit"
                   disabled={isSubmitDisabled}
                   className="bg-primary text-black hover:bg-primary/90 disabled:opacity-50"
-                  onClick={()=>props.setExecutar(true)}
+                  onClick={forceReload}
                 >
                   Confirmar
                 </Button>
