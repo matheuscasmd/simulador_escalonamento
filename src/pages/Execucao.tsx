@@ -13,7 +13,7 @@ import { PageFaultData } from '@/algoritmos/IPageFaultData';
 
 
 
-const VELOCIDADES_PREDEFINIDAS = [1, 2, 5, 10]
+const VELOCIDADES_PREDEFINIDAS = [1, 5, 10, 20, 100]
 
 
 function Execucao() {
@@ -28,8 +28,8 @@ function Execucao() {
   const [quantum,setQuantum] = useState<number>(0)
   const [sobrecarga,setSobrecarga] = useState<number>(0)
   const [turnaround,setTurnaround] = useState(0)
-  const [algoritmoMemoria,setAlgoritmoMemoria] = useState<"FIFO" | "MRU">("FIFO")
-  const [algoritmoProcessos,setAlgoritmoProcessos] = useState<"FIFO" | "SJF" | "EDF" | "RR">("FIFO")
+  const [algoritmoMemoria,setAlgoritmoMemoria] = useState<"FIFO" | "MRU" | "">("")
+  const [algoritmoProcessos,setAlgoritmoProcessos] = useState<"FIFO" | "SJF" | "EDF" | "RR" | "">("")
   
   const handleVelocidadeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setVelocidade(Number(e.target.value))
@@ -63,7 +63,7 @@ function Execucao() {
   },[algoritmoProcessos])
     
 
-  function getProcessosAlgoritmo(alg : "FIFO" | "EDF" | "RR" | "SJF"){
+  function getProcessosAlgoritmo(alg : "FIFO" | "EDF" | "RR" | "SJF" | ""){
     switch(alg){
       case "FIFO":
         return fifo(processos,algoritmoMemoria)
@@ -73,6 +73,8 @@ function Execucao() {
         return rr(processos,quantum,sobrecarga,algoritmoMemoria)
       case "SJF":
         return sjf(processos,algoritmoMemoria)
+      default:
+        return fifo(processos,algoritmoMemoria)
     }
   }
   
@@ -87,7 +89,7 @@ function Execucao() {
              setAlgoritmoProcessos={setAlgoritmoProcessos}
              setQuantum={setQuantum}
              setSobrecarga={setSobrecarga}/>
-            <div className='max-w-4xl'>
+            <div className='max-w-2xl'>
            {output && executar && turnaround && sobrecarga && quantum  && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
             </div>
             {executar && 
@@ -113,7 +115,7 @@ function Execucao() {
       <div className='w-full flex flex-row justify-evenly'>
       
 
-      <Tabs defaultValue='processos' className='w-full'>
+      <Tabs defaultValue='processos' className='w-full max-w-2xl'>
         <TabsList>
           <TabsTrigger value='processos'>Processos</TabsTrigger>
           <TabsTrigger value='pagefaults'>Page Faults</TabsTrigger>
