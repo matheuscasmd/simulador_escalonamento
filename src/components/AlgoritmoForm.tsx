@@ -73,7 +73,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                   </Label>
                   <input
                     id="sobrecarga"
-                    value={config.sobrecarga}
+                    defaultValue={config.sobrecarga}
                     type="text"
                     inputMode="numeric"
                     pattern="[0-9]*"
@@ -87,7 +87,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                     Quantum
                   </Label>
                   <input
-                    value={config.quantum}
+                    defaultValue={config.quantum}
                     id="quantum"
                     type="text"
                     inputMode="numeric"
@@ -102,7 +102,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                     Algoritmo de Processos
                   </Label>
                   <Select
-                    value={config.algoritmoProcessos}
+                    defaultValue={config.algoritmoProcessos}
                     onValueChange={(value) => handleInputChange('algoritmoProcessos', value)}
                   >
                     <SelectTrigger>
@@ -122,7 +122,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                     Algoritmo de Memória
                   </Label>
                   <Select
-                    value={config.algoritmoMemoria}
+                    defaultValue={config.algoritmoMemoria}
                     onValueChange={(value) => handleInputChange('algoritmoMemoria', value)}
                   >
                     <SelectTrigger>
