@@ -14,6 +14,8 @@ interface ExecucaoData {
 
 type ConfigFormProps = {
   setExecutar(param: boolean): void
+  setQuantum(x: number):void
+  setSobrecarga(x: number):void
 }
 
 export default function ConfigForm(props: ConfigFormProps) {
@@ -25,7 +27,10 @@ export default function ConfigForm(props: ConfigFormProps) {
     algoritmoMemoria: "FIFO",
   })
 
-  useEffect(() => {}, [config])
+  useEffect(() => {
+    props.setSobrecarga(config.sobrecarga)
+    props.setQuantum(config.quantum)
+  }, [config])
 
   const forceReload = () => {
     props.setExecutar(false)
@@ -149,7 +154,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                   type="submit"
                   disabled={isSubmitDisabled}
                   className="bg-primary text-black hover:bg-primary/90 disabled:opacity-50"
-                  onClick={forceReload}
+                  onClick={()=>setIsEditing(false)}
                 >
                   Confirmar
                 </Button>

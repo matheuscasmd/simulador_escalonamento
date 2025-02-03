@@ -15,6 +15,13 @@ import { PageFaultData } from '@/algoritmos/IPageFaultData';
 
 const VELOCIDADES_PREDEFINIDAS = [1, 2, 5, 10]
 
+interface ExecucaoData {
+  sobrecarga: number
+  quantum: number
+  algoritmoProcessos: string
+  algoritmoMemoria: string
+}
+
 function Execucao() {
 
   const [processos, setProcessos] = useState<IProcesso[]>([]);
@@ -28,6 +35,12 @@ function Execucao() {
   const [sobrecarga,setSobrecarga] = useState<number>(0)
   const [turnaround,setTurnaround] = useState(0)
   const [algoritmoMemoria,setAlgoritmoMemoria] = useState<"FIFO" | "MRU">("FIFO")
+  const [config, setConfig] = useState<ExecucaoData>({
+    sobrecarga: 0,
+    quantum: 0,
+    algoritmoProcessos: "FIFO",
+    algoritmoMemoria: "FIFO",
+  })
 
   const handleVelocidadeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setVelocidade(Number(e.target.value))
@@ -74,7 +87,9 @@ function Execucao() {
       case "EDF":
         return edf(processos,quantum,sobrecarga,algoritmoMemoria)
       case "RR":
-        return rr(processos,quantum,sobrecarga,algoritmoMemoria)
+        return rr(processos,quantum,sobrecarga)
+
+        // return rr(processos,quantum,sobrecarga,algoritmoMemoria)
       case "SJF":
         return sjf(processos,algoritmoMemoria)
     }
@@ -84,7 +99,7 @@ function Execucao() {
       <div className={`flex flex-col items-center justify-center w-full h-screen mx-auto ${output ? "pt-20" : ""} `}>
         <div className='flex flex-row w-full items-start pb-4'>
           <div className='flex flex-col w-full items-center gap-4 mx-4'>
-            <AlgoritmoForm setExecutar={handleExecutar}/>
+            <AlgoritmoForm setExecutar={handleExecutar} setQuantum={setQuantum} setSobrecarga={setSobrecarga}/>
             <div className='max-w-4xl'>
            {output && executar && turnaround && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
             </div>

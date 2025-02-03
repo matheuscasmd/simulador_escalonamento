@@ -29,6 +29,7 @@ export function Processos() {
   const [editedProcess, setEditedProcess] = useState<Partial<IProcesso>>({})
   const [currentPage, setCurrentPage] = useState(0)
   const [avaliable, setAvaliable] = useState(DISC_SIZE)
+  
 
   useEffect(() => {
     const storedProcessos = localStorage.getItem("processos")
