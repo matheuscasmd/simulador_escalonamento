@@ -1,9 +1,8 @@
 import { PageFaultData } from "../IPageFaultData";
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
-import { MRUMemoryManager } from "../memoria/mru";
 
-export function rr(processes_input: IProcesso[], quantum: number, preemptive: number, memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[]} {
+export function rr(processes_input: IProcesso[], quantum: number, preemptive: number): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[]  } {
     let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
 
     let n = processes.length;
@@ -15,13 +14,8 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
     let readyQueue: number[] = [];
     let output: number[][] = [];
     let memoryManager;
-    if(memoria === "FIFO"){
-        memoryManager = new FIFOMemoryManager(50,150,processes)
-    }
-    else {
-        memoryManager = new MRUMemoryManager(50,150,processes)
-    }
-  
+    memoryManager = new FIFOMemoryManager(50,150,processes)
+    
    
 
     output = Array.from({ length: n }, () => Array(10000).fill(-1));
@@ -38,28 +32,41 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
             while (counter < n && processes[counter].chegada <= current_time) {
                 readyQueue.push(counter);
                 counter++;
+
             }
             continue;
         }
 
         let i = readyQueue.shift()!;
-        let process = processes[i];
-
-        if (!process.finalizado) {
-            memoryManager.alocarProcessoRAM(process);
-            let executionTime = Math.min(process.tempo, quantum);
+       
+        if (!processes[i].finalizado) {
             
-            for (let t = current_time; t < current_time + executionTime; t++) {
-                output[i][t] = 1;
-            }
-            process.tempo -= executionTime;
-            current_time += executionTime;
+            if (processes[i].tempo <= quantum && processes[i].tempo > 0) {
+                memoryManager.alocarProcessoRAM(processes[i]);  
+                
+                
+                for (let t = current_time; t < current_time + processes[i].tempo; t++) {
+                    output[i][t] = 1;
+                }
+                current_time += processes[i].tempo;
+                
+                let pTime = processes[i].tempo;
 
-            if (process.tempo === 0) {
-                process.finalizado = true;
-                completedProcesses.push(process);
-                totalTurnaroundTime += current_time - process.chegada;
-            } else {
+                processes[i].tempo = 0;
+                processes[i].finalizado = true;
+                completedProcesses.push(processes[i]);
+                totalTurnaroundTime += current_time - processes[i].chegada;
+                for(let j = 0; j < pTime-1 ; j++) {
+                   
+                    memoryManager.copiarEstado();
+                }
+            } else if (processes[i].tempo > 0) {
+                memoryManager.alocarProcessoRAM(processes[i]);  
+                for (let t = current_time; t < current_time + quantum; t++) {
+                    output[i][t] = 1;
+                }
+                processes[i].tempo -= quantum;
+                current_time += quantum;
                 let preemptiveArrivalDetected = false;
                 for (let t = current_time; t < current_time + preemptive; t++) {
                     output[i][t] = 2;
@@ -70,27 +77,35 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
                     }
                 }
                 current_time += preemptive;
-                
-                if (preemptiveArrivalDetected) {
-                    console.log("Outro processo chegou durante a preempção em:", current_time);
+                if(!preemptiveArrivalDetected){
+                    readyQueue.push(i);
                 }
-                readyQueue.push(i);
+                for(let i = 0; i < quantum+preemptive - 1; i++) {
+                    memoryManager.copiarEstado();
+                }
             }
-            memoryManager.copiarEstado();
         }
 
         while (counter < n && processes[counter].chegada <= current_time) {
             readyQueue.push(counter);
             counter++;
         }
+
+        if (processes[i].tempo > 0) {
+            readyQueue.push(i);
+        }
     }
 
     for (let j = 0; j < n; j++) {
         for (let t = 0; t < processes[j].chegada; t++) {
-            if (output[j][t] === -1) output[j][t] = 5;
+            if (output[j][t] === -1) {
+                output[j][t] = 5;
+            }
         }
         for (let t = processes[j].chegada; t < current_time; t++) {
-            if (output[j][t] === -1) output[j][t] = 3;
+            if (output[j][t] === -1) {
+                output[j][t] = 3;
+            }
         }
     }
 
@@ -103,11 +118,15 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
     }
 
     output = output.map(row => row.filter(cell => cell !== -1));
+
     const orderedOutput: number[][] = new Array(n);
-      
     for (let i = 0; i < n; i++) {
         orderedOutput[processes[i].id] = output[i];
     }
-    orderedOutput.shift();
-    return { output: orderedOutput, average_turnaround: totalTurnaroundTime / n, ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo,pagefaults:memoryManager.pageFaultvsTempo };
+   
+
+    let average_turnaround = totalTurnaroundTime / n;
+    output = orderedOutput;
+    
+    return { output, average_turnaround,ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo,pagefaults:memoryManager.pageFaultvsTempo};
 }
