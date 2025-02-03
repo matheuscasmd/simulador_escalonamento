@@ -63,7 +63,7 @@ function Execucao() {
       setAlgoritmoMemoria(parsed.algoritmoMemoria)
     }
     if (processosSalvos) setProcessos(JSON.parse(processosSalvos));
-  }, [executar,quantum,sobrecarga]);
+  }, [executar]);
 
 
     
