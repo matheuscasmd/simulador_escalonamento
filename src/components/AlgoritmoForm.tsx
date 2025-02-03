@@ -44,7 +44,7 @@ export default function ConfigForm(props: ConfigFormProps) {
   const isSubmitDisabled = config.sobrecarga === 0 || config.quantum === 0
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto">
       {isEditing ? (
         <Card className="bg-muted border-border w-full">
           <CardHeader>
@@ -155,7 +155,10 @@ export default function ConfigForm(props: ConfigFormProps) {
         <Card className="bg-muted border-border w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-2xl font-bold text-primary">Configuração</CardTitle>
-            <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)}>
+            <Button variant="ghost" size="icon" onClick={() => {
+              setIsEditing(true)
+              props.setExecutar(false)
+              }}>
               <Pencil className="h-4 w-4" />
             </Button>
           </CardHeader>

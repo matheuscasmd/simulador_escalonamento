@@ -1,12 +1,7 @@
+import { PageFaultData } from "../IPageFaultData";
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 import { MRUMemoryManager } from "../memoria/mru";
-type PageFaultData = {
-    id: number;
-    page_fault: number;
-    time: number;
-  };
-//passar como parametro memoria : "FIFO" | "MRU"
 export function fifo(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number, ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[] } {
     let processes = processes_input.map(p => ({ ...p }));
     let n = processes.length;

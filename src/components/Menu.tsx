@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom'
 
 const menuItems = [
   { icon: CircleHelp, label: "Ajuda", tooltip: "Acessar a documentação", url: "/app/ajuda"},
-  { icon: RotateCcw, label: "Processos", tooltip: "Reiniciar a entrada de dados", url: "/app/processos" },
+  { icon: RotateCcw, label: "Editar processos", tooltip: "Reiniciar a entrada de dados", url: "/app/processos" },
   { icon: Play, label: "Execução", tooltip: "Escolha de algoritmos de escalonamento e execução", url: "/app/execucao" },
   { icon: History, label: "Histórico de execução", tooltip: "Ver histórico de execuções", url: "/app/historico"},
 ]
@@ -31,7 +31,6 @@ export function Menu() {
     <SidebarProvider className="w-fit pt-4 text-white">
       <Sidebar className="max-w-21 border-none bg-white h-screen flex flex-col">
         
-        {/* Cabeçalho com tamanho ajustado */}
         <SidebarHeader 
           className="w-full flex flex-row items-center justify-start bg-sidebarItem p-3 cursor-pointer"
           onClick={() => router("/home")}
@@ -42,7 +41,6 @@ export function Menu() {
           </span>
         </SidebarHeader>
 
-        {/* Conteúdo do menu com rolagem se necessário */}
         <SidebarContent className="bg-sidebarItem overflow-y-auto flex-1">
           <TooltipProvider delayDuration={0}>
             <SidebarMenu className="gap-4">
