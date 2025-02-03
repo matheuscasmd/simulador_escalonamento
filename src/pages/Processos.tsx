@@ -98,9 +98,7 @@ export function Processos() {
       currentProcesso.tamanho !== undefined &&
       currentProcesso.tamanho > 0 &&
       currentProcesso.tempo !== undefined &&
-      currentProcesso.tempo > 0 &&
-      currentProcesso.chegada !== undefined &&
-      currentProcesso.chegada > 0
+      currentProcesso.tempo > 0 
     ) {
       const newProcesso: IProcesso = {
         id: processos.length + 1,
@@ -117,8 +115,6 @@ export function Processos() {
       if (processos.length + 1 > itemsPerPage) {
         setCurrentPage(Math.floor(processos.length / itemsPerPage))
       }
-    } else {
-      alert("Todos os campos (exceto deadline) devem ser maiores que 0.")
     }
   }
 
