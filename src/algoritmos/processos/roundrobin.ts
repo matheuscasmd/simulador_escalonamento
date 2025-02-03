@@ -1,8 +1,12 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 import { MRUMemoryManager } from "../memoria/mru";
-
-export function rr(processes_input: IProcesso[], quantum: number, preemptive: number, memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
+type PageFaultData = {
+    id: number;
+    page_fault: number;
+    time: number;
+  };
+export function rr(processes_input: IProcesso[], quantum: number, preemptive: number, memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[]} {
     let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
 
     let n = processes.length;
@@ -108,5 +112,5 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
         orderedOutput[processes[i].id] = output[i];
     }
     orderedOutput.shift();
-    return { output: orderedOutput, average_turnaround: totalTurnaroundTime / n, ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo };
+    return { output: orderedOutput, average_turnaround: totalTurnaroundTime / n, ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo,pagefaults:memoryManager.pageFaultvsTempo };
 }
