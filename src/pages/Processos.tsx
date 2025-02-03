@@ -47,7 +47,7 @@ export function Processos() {
   }, [processos])
 
   const router = useNavigate()
-  const itemsPerPage = 5
+  const itemsPerPage = 3
   const totalPages = Math.ceil(processos.length / itemsPerPage)
 
   const goToAlgorithms = () => {
