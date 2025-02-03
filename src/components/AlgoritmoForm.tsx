@@ -32,17 +32,21 @@ export default function ConfigForm(props: ConfigFormProps) {
     props.setQuantum(config.quantum)
   }, [config])
 
-  const forceReload = () => {
-    props.setExecutar(false)
+  const forceReload = async () => {
+    await setConfig(prevConfig => ({ ...prevConfig }));
+    props.setExecutar(false);
     setTimeout(() => {
-      props.setExecutar(true)
-    }, 1)
+      props.setExecutar(true);
+    }, 1);
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    localStorage.setItem('config', JSON.stringify(config))
-    setIsEditing(false)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await setConfig(prevConfig => ({ ...prevConfig }));
+    localStorage.setItem('config', JSON.stringify(config));
+    setIsEditing(false);
+    props.setSobrecarga(config.sobrecarga);
+    props.setQuantum(config.quantum);
   }
 
   const handleChange = (field: keyof ExecucaoData, value: string | number) => {
@@ -154,7 +158,9 @@ export default function ConfigForm(props: ConfigFormProps) {
                   type="submit"
                   disabled={isSubmitDisabled}
                   className="bg-primary text-black hover:bg-primary/90 disabled:opacity-50"
-                  onClick={()=>setIsEditing(false)}
+                  onClick={()=>{
+                    setIsEditing(false)
+                  }}
                 >
                   Confirmar
                 </Button>
