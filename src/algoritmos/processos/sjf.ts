@@ -1,8 +1,12 @@
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 import { MRUMemoryManager } from "../memoria/mru";
-
-export function sjf(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][] } {
+type PageFaultData = {
+    id: number;
+    page_fault: number;
+    time: number;
+  };
+export function sjf(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[] } {
   let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
   let n = processes.length;
   let completed = 0;
@@ -76,5 +80,5 @@ export function sjf(processes_input: IProcesso[], memoria : "FIFO" | "MRU"): { o
  
 
   let average_turnaround = totalTurnaroundTime / n;
-  return { output, average_turnaround,ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo };
+  return { output, average_turnaround,ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo,pagefaults:memoryManager.pageFaultvsTempo };
 }
