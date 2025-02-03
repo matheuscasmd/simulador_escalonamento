@@ -1,6 +1,6 @@
 # **Simulador de Escalonamento de Processos e Substituição de Páginas**
 
-![Logo](/src/assets/Group.png)
+![Logo](/src/assets/logowithtext.png)
 
 ## 📌 **Sobre o Projeto**
 Este projeto é um trabalho acadêmico da disciplina **MATA58 - Sistemas Operacionais**. O objetivo principal é proporcionar uma visualização interativa e detalhada do comportamento de diferentes algoritmos de escalonamento de processos e de substituição de páginas, permitindo uma análise mais profunda dos conceitos estudados.
