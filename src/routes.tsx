@@ -16,7 +16,7 @@ const AppRoutes = () => {
           <Route path="processos" element={<Processos />} />
           <Route path="ajuda" element={<Ajuda />} />
         </Route>
-        <Route path="*" element={<p>Essa página não existe</p>} />
+        <Route path="*" element={<Navigate to="/home" replace/>} />
       </Routes>
     </Router>
   );
