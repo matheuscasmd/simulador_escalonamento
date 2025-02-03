@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,45 +8,54 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 interface ExecucaoData {
   sobrecarga: number
   quantum: number
-  algoritmoProcessos: string
-  algoritmoMemoria: string
+  algoritmoProcessos: tipoalgproc
+  algoritmoMemoria: tipoalgmem
 }
+
+type tipoalgproc = "FIFO" | "SJF"| "RR" | "EDF"
+type tipoalgmem = "FIFO" | "MRU"
 
 type ConfigFormProps = {
   setExecutar(param: boolean): void
+  setAlgoritmoProcessos(arg : tipoalgproc):void
+  setAlgoritmoMemoria(arg : tipoalgmem):void
+  setQuantum(arg : number):void
+  setSobrecarga(arg: number):void
+  config : ExecucaoData
 }
 
 export default function ConfigForm(props: ConfigFormProps) {
   const [isEditing, setIsEditing] = useState(true)
-  const [config, setConfig] = useState<ExecucaoData>({
-    sobrecarga: 0,
-    quantum: 0,
-    algoritmoProcessos: "FIFO",
-    algoritmoMemoria: "FIFO",
-  })
-
+  const [config, setConfig] = useState(props.config)
 
   const forceReload = () => {
-    handleSubmit()
     props.setExecutar(false)
     setTimeout(() => {
       props.setExecutar(true)
     }, 1)
   }
 
-  const handleSubmit = () => {
-    localStorage.setItem('config', JSON.stringify(config))
-    setIsEditing(false)
-  }
+  const handleInputChange = (field: keyof ExecucaoData, value: string | number) => {
+    if (field === "quantum" || field === "sobrecarga") {
+      if (typeof value === "string" && !/^\d*$/.test(value)) {
+        return
+      }
+      value = Number(value)
+    }
 
-  const handleChange = (field: keyof ExecucaoData, value: string | number) => {
-    setConfig(prevConfig => ({
-      ...prevConfig,
-      [field]: value
-    }))
-  }
+    const updatedConfig = { ...config, [field]: value }
+    setConfig(updatedConfig)
 
-  const isSubmitDisabled = config.sobrecarga === 0 || config.quantum === 0
+    if (field === 'sobrecarga') {
+      props.setSobrecarga(Number(value))
+    } else if (field === 'quantum') {
+      props.setQuantum(Number(value))
+    } else if (field === 'algoritmoProcessos') {
+      props.setAlgoritmoProcessos(value as tipoalgproc)
+    } else if (field === 'algoritmoMemoria') {
+      props.setAlgoritmoMemoria(value as tipoalgmem)
+    }
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -56,7 +65,7 @@ export default function ConfigForm(props: ConfigFormProps) {
             <CardTitle className="text-primary">Configuração</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-6">
               <div className="space-y-4">
                 <div className="grid gap-2">
                   <Label htmlFor="sobrecarga" className="text-primary">
@@ -64,15 +73,12 @@ export default function ConfigForm(props: ConfigFormProps) {
                   </Label>
                   <input
                     id="sobrecarga"
-                    type="text"
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     value={config.sobrecarga}
-                    onKeyPress={(e) => {
-                      if (!/[0-9]/.test(e.key)) {
-                        e.preventDefault()
-                      }
-                    }}
-                    onChange={(e) => handleChange('sobrecarga', Number(e.target.value))}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    onChange={(e) => handleInputChange('sobrecarga', e.target.value)}
                   />
                 </div>
 
@@ -81,16 +87,13 @@ export default function ConfigForm(props: ConfigFormProps) {
                     Quantum
                   </Label>
                   <input
+                    value={config.quantum}
                     id="quantum"
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={config.quantum}
-                    onKeyPress={(e) => {
-                      if (!/[0-9]/.test(e.key)) {
-                        e.preventDefault()
-                      }
-                    }}
-                    onChange={(e) => handleChange('quantum', Number(e.target.value))}
+                    onChange={(e) => handleInputChange('quantum', e.target.value)}
                   />
                 </div>
 
@@ -100,7 +103,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                   </Label>
                   <Select
                     value={config.algoritmoProcessos}
-                    onValueChange={(value) => handleChange('algoritmoProcessos', value)}
+                    onValueChange={(value) => handleInputChange('algoritmoProcessos', value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o algoritmo" />
@@ -120,7 +123,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                   </Label>
                   <Select
                     value={config.algoritmoMemoria}
-                    onValueChange={(value) => handleChange('algoritmoMemoria', value)}
+                    onValueChange={(value) => handleInputChange('algoritmoMemoria', value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o algoritmo" />
@@ -135,25 +138,13 @@ export default function ConfigForm(props: ConfigFormProps) {
 
               <div className="flex justify-end space-x-4">
                 <Button
-                  type="button"
-                  onClick={() =>
-                    setConfig({ sobrecarga: 0, quantum: 0, algoritmoProcessos: "FIFO", algoritmoMemoria: "FIFO" })
-                  }
-                  variant="outline"
-                  className="border-primary text-primary hover:scale-105"
-                >
-                  Resetar
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isSubmitDisabled}
                   className="bg-primary text-black hover:bg-primary/90 disabled:opacity-50"
-                  onClick={handleSubmit}
+                  onClick={() => setIsEditing(false)}
                 >
                   Confirmar
                 </Button>
               </div>
-            </form>
+            </div>
           </CardContent>
         </Card>
       ) : (
