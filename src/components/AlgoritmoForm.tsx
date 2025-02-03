@@ -140,6 +140,7 @@ export default function ConfigForm(props: ConfigFormProps) {
                 <Button
                   className="bg-primary text-black hover:bg-primary/90 disabled:opacity-50"
                   onClick={() => setIsEditing(false)}
+                  disabled={props.config.quantum === 0 || props.config.sobrecarga === 0}
                 >
                   Confirmar
                 </Button>

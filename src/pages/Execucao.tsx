@@ -88,7 +88,7 @@ function Execucao() {
              setQuantum={setQuantum}
              setSobrecarga={setSobrecarga}/>
             <div className='max-w-4xl'>
-           {output && executar && turnaround && sobrecarga && quantum && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
+           {output && executar && turnaround && sobrecarga != 0 && quantum != 0 && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
             </div>
             {executar && 
             <div className="flex items-center gap-4 sticky left-0">
