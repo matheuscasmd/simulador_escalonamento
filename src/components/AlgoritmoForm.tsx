@@ -25,7 +25,6 @@ export default function ConfigForm(props: ConfigFormProps) {
     algoritmoMemoria: "FIFO",
   })
 
-  useEffect(() => {}, [config])
 
   const forceReload = () => {
     handleSubmit()
