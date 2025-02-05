@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 
 interface ExecucaoData {
   sobrecarga: number;
@@ -41,6 +42,7 @@ export default function ConfigForm(props: ConfigFormProps) {
   //   props.setExecutar(false)
     
   // }
+  const navigator = useNavigate()
 
   const handleInputChange = (field: keyof ExecucaoData, value: string | number) => {
     if (field === "quantum" || field === "sobrecarga") {
@@ -179,31 +181,26 @@ export default function ConfigForm(props: ConfigFormProps) {
             </div>
           </CardContent>
           <div className="flex flex-row w-full justify-end p-4 space-x-2">
-            <Button
-              variant="outline"
-              className="text-primary bg-sidebar"
-              onClick={() => {
-                setIsEditing(true);
-                props.setExecutar(false);
-              }}
-            >
-              Editar Configuração
-            </Button>
-            <Button
-              variant="outline"
-              className="text-primary bg-sidebar"
-              onClick={() => {
-                setIsEditing(true)
-                props.setExecutar(false)
-                setInterval(()=>{
-                  setIsEditing(false);
-                  props.setExecutar(true);
-                },1)
-              }}
-              disabled={!isFormValid()}
-            >
-              Executar novamente
-            </Button>
+          <Button
+            variant="outline"
+            className="text-primary bg-sidebar"
+            onClick={() => window.location.reload()}
+          >
+            Editar Configuração
+          </Button>
+          <Button
+            variant="outline"
+            className="text-primary bg-sidebar"
+            onClick={() => {
+              props.setExecutar(false);
+              setTimeout(() => {
+                props.setExecutar(true);
+              }, 1);
+            }}
+            disabled={!isFormValid()}
+          >
+            Executar novamente
+          </Button>
           </div>
         </Card>
       )}
