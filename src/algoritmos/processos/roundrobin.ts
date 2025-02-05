@@ -3,7 +3,7 @@ import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 import { MRUMemoryManager } from "../memoria/mru";
 
-export function rr(processes_input: IProcesso[], quantum: number, preemptive: number, memoria : "FIFO" | "MRU" | ""): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[] } {
+export function rr(processes_input: IProcesso[], quantum: number, preemptive: number, memoria: "FIFO"|"MRU"): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[] } {
     let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
 
     let n = processes.length;
@@ -13,18 +13,17 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
     let counter: number = 0;
 
     let readyQueue: number[] = [];
-    let output: number[][] = [];
+    let output: number[][] = [[-1]];
     let memoryManager;
-    if(memoria === "FIFO"){
+    if(memoria == "FIFO"){
         memoryManager = new FIFOMemoryManager(50,150,processes)
     }
-    else {
+    else{
         memoryManager = new MRUMemoryManager(50,150,processes)
     }
-  
    
+    
 
-    output = Array.from({ length: n }, () => Array(10000).fill(-1));
     while (counter < n && processes[counter].chegada <= current_time) {
         readyQueue.push(counter);
         counter++;
@@ -75,6 +74,7 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
                 let preemptiveArrivalDetected = false;
                 for (let t = current_time; t < current_time + preemptive; t++) {
                     output[i][t] = 2;
+                    //Verifica se um processo entrou durante a preempção
                     while (counter < n && processes[counter].chegada <=t ) {
                         readyQueue.push(counter);
                         counter++;
@@ -84,23 +84,19 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
                 }
                 
                 current_time += preemptive;
-                if(!preemptiveArrivalDetected && readyQueue.length === 0  ){
-                    readyQueue.push(i);
-                }
+                //Adiciona o processo na fila mais uma vez
+                readyQueue.push(i);
                 for(let i = 0; i < quantum+preemptive - 1; i++) {
                     memoryManager.copiarEstado();
                 }
             }
         }
-
+        // Verifica se um novo processo está ocorrendo durante as esperas
         while (counter < n && processes[counter].chegada <= current_time) {
             readyQueue.push(counter);
             counter++;
         }
-
-        if (processes[i].tempo > 0  && !readyQueue.includes(i)) {
-            readyQueue.push(i);
-        }
+        
     }
 
     for (let j = 0; j < n; j++) {
