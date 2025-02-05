@@ -55,7 +55,7 @@ function Execucao() {
 
 
   useEffect(()=>{
-    if(executar && algoritmoMemoria && sobrecarga && quantum && algoritmoProcessos){
+    if(algoritmoMemoria && sobrecarga && quantum && algoritmoProcessos){
     setOutput(getProcessosAlgoritmo(algoritmoProcessos).output)
     setTurnaround(getProcessosAlgoritmo(algoritmoProcessos).average_turnaround)
     setDiscovsTempo(getProcessosAlgoritmo(algoritmoProcessos).discoHistory)
