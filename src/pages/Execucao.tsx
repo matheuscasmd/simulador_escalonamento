@@ -55,7 +55,7 @@ function Execucao() {
 
 
   useEffect(()=>{
-    if(executar && algoritmoMemoria && sobrecarga && quantum){
+    if(executar && algoritmoMemoria && sobrecarga && quantum && algoritmoProcessos){
     setOutput(getProcessosAlgoritmo(algoritmoProcessos).output)
     setTurnaround(getProcessosAlgoritmo(algoritmoProcessos).average_turnaround)
     setDiscovsTempo(getProcessosAlgoritmo(algoritmoProcessos).discoHistory)
@@ -83,7 +83,7 @@ function Execucao() {
   }
   
   return (
-      <div className={`flex flex-col items-center justify-center w-full h-screen mx-auto ${output ? "pt-20" : ""} `}>
+      <div className={`flex flex-col items-center justify-center w-full h-screen mx-auto ${output ? "pt-20": ""} ${processos.length > 5 ? "pt-44" : ""}` }>
         <div className='flex flex-row w-full items-start pb-4'>
           <div className='flex flex-col w-full items-center gap-4 mx-4'>
             <AlgoritmoForm
