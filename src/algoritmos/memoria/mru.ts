@@ -34,7 +34,7 @@ export class MRUMemoryManager {
     this.paginasOcupadas = [];
     this.processInput = processos;
     this.pageFaults = 0;
-    this.tempo = 1;
+    this.tempo = 0;
     this.RAMvsTempo = [];
     this.DISCOvsTempo = [];
     this.alocarDiscoTudo(processos);

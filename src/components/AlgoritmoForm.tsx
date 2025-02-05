@@ -193,12 +193,16 @@ export default function ConfigForm(props: ConfigFormProps) {
               variant="outline"
               className="text-primary bg-sidebar"
               onClick={() => {
-                setIsEditing(false);
-                props.setExecutar(true);
+                setIsEditing(true)
+                props.setExecutar(false)
+                setInterval(()=>{
+                  setIsEditing(false);
+                  props.setExecutar(true);
+                },1)
               }}
               disabled={!isFormValid()}
             >
-              Executar
+              Executar novamente
             </Button>
           </div>
         </Card>

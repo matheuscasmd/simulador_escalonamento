@@ -94,8 +94,7 @@ function Execucao() {
              setQuantum={setQuantum}
              setSobrecarga={setSobrecarga}/>
             <div className='max-w-2xl'>
-           {output && executar && turnaround && sobrecarga && quantum  && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
-            </div>
+            <div className='flex flex-row w-full justify-center'>
             {executar && 
             <div className="flex items-center gap-4 sticky left-0">
               <span className="text-[#00FF00] text-lg font-medium">Velocidade: </span>
@@ -111,6 +110,10 @@ function Execucao() {
                 ))}
               </select>
             </div>}
+            </div>
+           {output && executar && turnaround && sobrecarga && quantum  && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
+            </div>
+            
           </div>
           <div className='flex flex-col w-full items-center gap-4 mx-4'>
             
@@ -151,8 +154,8 @@ function Execucao() {
                         <table className="min-w-full bg-[#2A2A2A] border border-[#333333]">
                           <thead>
                             <tr>
-                              <th className="px-4 py-2 border border-[#333333]">Tempo (segundos)</th>
-                              <th className="px-4 py-2 border border-[#333333]">Processo ID</th>
+                              <th className="px-4 py-2 border border-[#333333]">Instante</th>
+                              <th className="px-4 py-2 border border-[#333333]">Processo</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -164,6 +167,7 @@ function Execucao() {
                                   <td className="px-4 py-2 border border-[#333333] text-center">{pf!.id}</td> {/* Usamos ! para garantir que pf não é null */}
                                 </tr>
                               ))}
+                            <p className='text-lg m'>Total: <span className='text-white'>{pageFaults.filter((pf) => pf !== null && pf.page_fault === 1).length}</span></p>
                           </tbody>
                         </table>
                       </div>

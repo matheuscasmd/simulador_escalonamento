@@ -44,8 +44,8 @@
     .fullscreen-rectangle {
     top: 0;
     left: 0;
-    background-color: #181818; /* Cor do retângulo */
-    opacity: 0.97; /* Opacidade de 97% */
+    background-color: #181818;
+    opacity: 0.97;
     }}
 .circuit-background {
   background-color: #1a1a1a;
@@ -55,3 +55,55 @@
   opacity: 0.1;
 }
 
+::-webkit-scrollbar {
+  width: 6px; 
+  min-width: 1px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00FF00;
+  border-radius: 3px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00CC00;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #00FF00 transparent;
+}
+
+* {
+  scrollbar-color: #00FF00 transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #00FF00;
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+* {
+  scrollbar-width: thin;
+}
+
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+  }
+}
+
+@supports (-webkit-appearance: none) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    min-width: 1px;
+  }
+}
