@@ -55,12 +55,16 @@ function Execucao() {
 
 
   useEffect(()=>{
+    if(executar && algoritmoMemoria && sobrecarga && quantum){
     setOutput(getProcessosAlgoritmo(algoritmoProcessos).output)
     setTurnaround(getProcessosAlgoritmo(algoritmoProcessos).average_turnaround)
     setDiscovsTempo(getProcessosAlgoritmo(algoritmoProcessos).discoHistory)
     setRAMvsTempo(getProcessosAlgoritmo(algoritmoProcessos).ramHistory)
     setPageFaults(getProcessosAlgoritmo(algoritmoProcessos).pagefaults)
-  },[algoritmoProcessos])
+    }
+  },[algoritmoProcessos,quantum,sobrecarga,algoritmoMemoria])
+
+  
     
 
   function getProcessosAlgoritmo(alg : "FIFO" | "EDF" | "RR" | "SJF" | ""){
