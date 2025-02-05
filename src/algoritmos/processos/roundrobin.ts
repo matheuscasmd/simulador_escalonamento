@@ -24,7 +24,6 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
   
    
 
-    output = Array.from({ length: n }, () => Array(10000).fill(-1));
     while (counter < n && processes[counter].chegada <= current_time) {
         readyQueue.push(counter);
         counter++;

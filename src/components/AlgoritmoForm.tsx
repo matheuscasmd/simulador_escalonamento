@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 
 interface ExecucaoData {
   sobrecarga: number;
@@ -28,19 +29,8 @@ export default function ConfigForm(props: ConfigFormProps) {
   const [isEditing, setIsEditing] = useState(true);
   const [config, setConfig] = useState(props.config);
 
-  // const forceReload = () => {
-  //   if(!isEditing){
-  //     setIsEditing(false)
-  //     props.setExecutar(true)
-  //   }else {
-  //     setIsEditing
-  //     setTimeout(() => {
-  //       props.setExecutar(true)
-  //     }, 1)
-  //   }
-  //   props.setExecutar(false)
-    
-  // }
+
+  const navigate = useNavigate()
 
   const handleInputChange = (field: keyof ExecucaoData, value: string | number) => {
     if (field === "quantum" || field === "sobrecarga") {
@@ -183,8 +173,7 @@ export default function ConfigForm(props: ConfigFormProps) {
               variant="outline"
               className="text-primary bg-sidebar"
               onClick={() => {
-                setIsEditing(true);
-                props.setExecutar(false);
+                navigate("/app/execucao")
               }}
             >
               Editar Configuração

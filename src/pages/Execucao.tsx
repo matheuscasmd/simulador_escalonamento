@@ -55,12 +55,14 @@ function Execucao() {
 
 
   useEffect(()=>{
-    setOutput(getProcessosAlgoritmo(algoritmoProcessos).output)
-    setTurnaround(getProcessosAlgoritmo(algoritmoProcessos).average_turnaround)
-    setDiscovsTempo(getProcessosAlgoritmo(algoritmoProcessos).discoHistory)
-    setRAMvsTempo(getProcessosAlgoritmo(algoritmoProcessos).ramHistory)
-    setPageFaults(getProcessosAlgoritmo(algoritmoProcessos).pagefaults)
-  },[algoritmoProcessos])
+    if(algoritmoMemoria && algoritmoProcessos){
+      setOutput(getProcessosAlgoritmo(algoritmoProcessos).output)
+      setTurnaround(getProcessosAlgoritmo(algoritmoProcessos).average_turnaround)
+      setDiscovsTempo(getProcessosAlgoritmo(algoritmoProcessos).discoHistory)
+      setRAMvsTempo(getProcessosAlgoritmo(algoritmoProcessos).ramHistory)
+      setPageFaults(getProcessosAlgoritmo(algoritmoProcessos).pagefaults)
+    }
+  },[processos,algoritmoProcessos,algoritmoMemoria])
     
 
   function getProcessosAlgoritmo(alg : "FIFO" | "EDF" | "RR" | "SJF" | ""){

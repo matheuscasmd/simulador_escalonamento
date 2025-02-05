@@ -316,13 +316,13 @@ export function Processos() {
                       className="bg-primary text-black hover:bg-primary/90"
                       disabled={avaliable === 0}
                     >
-                      Adicionar novo
+                      Adicionar
                     </Button>
                   </div>
                 </CardContent>
               </Card>
               <Button onClick={goToAlgorithms} className="mb-4">
-                Algoritmos de escalonamento
+                Ir para execução
               </Button>
             </div>
           </div>

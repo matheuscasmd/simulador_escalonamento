@@ -54,4 +54,59 @@
   background-position: 0 0, 10px 10px;
   opacity: 0.1;
 }
+/* Estilo para navegadores WebKit (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+  width: 6px;  /* Largura padrão */
+  min-width: 1px;  /* Largura mínima */
+}
 
+::-webkit-scrollbar-track {
+  background: transparent;  /* Fundo transparente */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00FF00;
+  border-radius: 3px;  /* Pontas arredondadas */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00CC00;
+}
+
+/* Estilo para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #00FF00 transparent;
+}
+
+/* Estilo para navegadores que suportam a nova especificação */
+* {
+  scrollbar-color: #00FF00 transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #00FF00;
+  border-radius: 3px;  /* Pontas arredondadas */
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Garantir largura mínima em diferentes navegadores */
+* {
+  scrollbar-width: thin;
+}
+
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+  }
+}
+
+@supports (-webkit-appearance: none) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    min-width: 1px;
+  }
+}
