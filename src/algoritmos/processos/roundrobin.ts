@@ -2,7 +2,6 @@ import { PageFaultData } from "../IPageFaultData";
 import { IProcesso } from "../IProcesso";
 import { FIFOMemoryManager } from "../memoria/fifo";
 import { MRUMemoryManager } from "../memoria/mru";
-
 export function rr(processes_input: IProcesso[], quantum: number, preemptive: number, memoria: "FIFO"|"MRU"|""): { output: number[][], average_turnaround: number,ramHistory:(number|null)[][],discoHistory:(number|null)[][],pagefaults:(PageFaultData | null)[] } {
     let processes = processes_input.map(p => ({ ...p })).sort((a, b) => a.chegada - b.chegada);
 
@@ -19,7 +18,7 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
         memoryManager = new FIFOMemoryManager(50,150,processes)
     }
     else{
-        memoryManager = new MRUMemoryManager(50,150,processes)
+        memoryManager =  new MRUMemoryManager(50,150,processes)
     }
    
     
@@ -74,14 +73,12 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
                 }
                 processes[i].tempo -= quantum;
                 current_time += quantum;
-                let preemptiveArrivalDetected = false;
                 for (let t = current_time; t < current_time + preemptive; t++) {
                     output[i][t] = 2;
                     //Verifica se um processo entrou durante a preempção
                     while (counter < n && processes[counter].chegada <=t ) {
                         readyQueue.push(counter);
                         counter++;
-                        preemptiveArrivalDetected = true;
                     }
                     
                 }
@@ -91,7 +88,7 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
                 readyQueue.push(i);
                 for(let i = 0; i < quantum+preemptive - 1; i++) {
                     memoryManager.copiarEstado();
-                }
+                }''
             }
         }
         // Verifica se um novo processo está ocorrendo durante as esperas
