@@ -16,7 +16,7 @@ import { PageFaultData } from '@/algoritmos/IPageFaultData';
 const VELOCIDADES_PREDEFINIDAS = [1, 5, 10, 20, 100]
 
 
-function Execucao() {
+export function Execucao() {
 
   const [processos, setProcessos] = useState<IProcesso[]>([]);
   const [output,setOutput] = useState<number[][]>([[]])
@@ -83,8 +83,8 @@ function Execucao() {
   }
   
   return (
-      <div className={`flex flex-col items-center justify-center w-full h-screen mx-auto ${output ? "pt-20": ""} ${processos.length > 5 ? "pt-44" : ""}` }>
-        <div className='flex flex-row w-full items-start pb-4'>
+      <div className={`flex flex-row items-center justify-center w-full h-screen mx-auto ${output ? "pt-20": ""} ${processos.length > 5 ? "pt-44" : ""}` }>
+        <div className='flex flex-row w-full items-center pb-4'>
           <div className='flex flex-col w-full items-center gap-4 mx-4'>
             <AlgoritmoForm
             config={{sobrecarga,quantum,algoritmoProcessos,algoritmoMemoria}}
@@ -115,13 +115,11 @@ function Execucao() {
             </div>
             
           </div>
-          <div className='flex flex-col w-full items-center gap-4 mx-4'>
             
-      {executar && output && RAMvsTempo && DiscovsTempo && <MemoriaCard RAMvsTempo={RAMvsTempo.slice(1)} DISCOvsTempo={DiscovsTempo.slice(1)} velocidade={velocidade}/>}
       {executar &&  output && turnaround && pageFaults &&
+      <div className='flex flex-col w-full items-center gap-4 mx-4'>
+      {executar && output && RAMvsTempo && DiscovsTempo && <MemoriaCard RAMvsTempo={RAMvsTempo.slice(1)} DISCOvsTempo={DiscovsTempo.slice(1)} velocidade={velocidade}/>}
       <div className='w-full flex flex-row justify-evenly'>
-      
-
       <Tabs defaultValue='processos' className='w-full max-w-2xl'>
         <TabsList>
           <TabsTrigger value='processos'>Processos</TabsTrigger>
@@ -160,11 +158,11 @@ function Execucao() {
                           </thead>
                           <tbody>
                             {pageFaults
-                              .filter((pf) => pf !== null && pf.page_fault === 1) // Filtra valores não nulos e page_fault === 1
+                              .filter((pf) => pf !== null && pf.page_fault === 1)
                               .map((pf, index) => (
                                 <tr key={index} className="hover:bg-[#333333]">
-                                  <td className="px-4 py-2 border border-[#333333] text-center">{pf!.time}</td> {/* Usamos ! para garantir que pf não é null */}
-                                  <td className="px-4 py-2 border border-[#333333] text-center">{pf!.id}</td> {/* Usamos ! para garantir que pf não é null */}
+                                  <td className="px-4 py-2 border border-[#333333] text-center">{pf!.time}</td>
+                                  <td className="px-4 py-2 border border-[#333333] text-center">{pf!.id}</td>
                                 </tr>
                               ))}
                             <p className='text-lg m'>Total: <span className='text-white'>{pageFaults.filter((pf) => pf !== null && pf.page_fault === 1).length}</span></p>
@@ -175,14 +173,14 @@ function Execucao() {
                   </Card>
                 </TabsContent>
                 </Tabs>
+            </div>
+
               </div>}
           </div>
-        </div>
       </div>
   )
 }
 
-export default Execucao
 
 
 

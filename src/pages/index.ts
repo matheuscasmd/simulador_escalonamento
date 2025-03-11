@@ -1,0 +1,5 @@
+export * from "./Ajuda"
+export * from "./Historico"
+export * from "./Home"
+export * from "./Processos"
+export * from "./Execucao"

@@ -1,5 +1,5 @@
 import Logo from "../assets/Group.png"
-import { History, RotateCcw, CircleHelp, Play } from 'lucide-react'
+import { History, Braces, CircleHelp, Play } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -19,8 +19,9 @@ import { useNavigate } from 'react-router-dom'
 
 const menuItems = [
   { icon: CircleHelp, label: "Ajuda", tooltip: "Acessar a documentação", url: "/app/ajuda"},
-  { icon: RotateCcw, label: "Editar processos", tooltip: "Reiniciar a entrada de dados", url: "/app/processos" },
-  { icon: Play, label: "Execução", tooltip: "Escolha de algoritmos de escalonamento e execução", url: "/app/execucao" }
+  { icon: Braces, label: "Editar processos", tooltip: "Reiniciar a entrada de dados", url: "/app/processos" },
+  { icon: Play, label: "Execução", tooltip: "Escolha de algoritmos de escalonamento e execução", url: "/app/execucao" },
+  { icon: History, label: "Histórico de execução", tooltip: "Escolha de algoritmos de escalonamento e execução", url: "/app/historico" },
 ]
 
 export function Menu() {

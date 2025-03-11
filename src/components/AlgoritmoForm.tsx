@@ -28,20 +28,6 @@ export default function ConfigForm(props: ConfigFormProps) {
   const [isEditing, setIsEditing] = useState(true);
   const [config, setConfig] = useState(props.config);
 
-  // const forceReload = () => {
-  //   if(!isEditing){
-  //     setIsEditing(false)
-  //     props.setExecutar(true)
-  //   }else {
-  //     setIsEditing
-  //     setTimeout(() => {
-  //       props.setExecutar(true)
-  //     }, 1)
-  //   }
-  //   props.setExecutar(false)
-    
-  // }
-
   const handleInputChange = (field: keyof ExecucaoData, value: string | number) => {
     if (field === "quantum" || field === "sobrecarga") {
       const numValue = Number(value);
