@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card } from "./ui/card"
+import { IProcesso } from "@/algoritmos/IProcesso"
 
 
 type EsteiraExecucaoProps = {
@@ -8,6 +9,9 @@ type EsteiraExecucaoProps = {
   lista : number[][]
   turnaround : number
   velocidade : number
+  processos: IProcesso[]
+  algoritmoMemoria: "FIFO" | "MRU" | ""
+  algoritmoProcessos: "FIFO" | "SJF" | "EDF" | "RR" | ""
 }
 
 const estadoCores: Record<number, string> = {
@@ -20,8 +24,23 @@ const estadoCores: Record<number, string> = {
 
 
 
-export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucaoProps) {
+export function EsteiraExecucao({ lista,turnaround,velocidade,processos,algoritmoMemoria,algoritmoProcessos }: EsteiraExecucaoProps) {
   const [visibleStates, setVisibleStates] = useState<number[]>(lista.map(() => 0))
+
+  useEffect(() => {
+    const historicoAnterior = localStorage.getItem("historico_execucao")
+    const historicoArray = historicoAnterior ? JSON.parse(historicoAnterior) : []
+
+    historicoArray.push({
+      lista: lista,
+      turnaround: turnaround,
+      processos: processos,
+      algoritmoMemoria: algoritmoMemoria,
+      algoritmoProcessos: algoritmoProcessos
+    })
+
+    localStorage.setItem("historico_execucao", JSON.stringify(historicoArray))
+  }, [lista, turnaround])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,10 +71,8 @@ export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucao
 
   return (
     <Card className="bg-[#1A1A1A] border-none rounded-lg flex flex-col p-6 w-full overflow-x-auto">
-      {/* Seletor de Velocidade */}
       
 
-      {/* Renderização da Lista de Processos */}
       <div className="min-w-max">
         {lista.map((processo, index) => (
           <div key={index} className="flex flex-col space-y-2 mb-6">
@@ -78,7 +95,6 @@ export function EsteiraExecucao({ lista,turnaround,velocidade }: EsteiraExecucao
         ))}
       </div>
 
-      {/* Legenda de Estados */}
       <div className="flex flex-wrap gap-4 sticky left-0 text-sm">
         {Object.entries(estadoCores).map(([estado, cor]) => (
           <div key={estado} className="flex items-center gap-2">

@@ -111,7 +111,15 @@ export function Execucao() {
               </select>
             </div>}
             </div>
-           {output && executar && turnaround && sobrecarga && quantum  && <EsteiraExecucao lista={output} turnaround={turnaround} velocidade={velocidade} />}
+           {output && executar && turnaround && sobrecarga && quantum  && 
+           <EsteiraExecucao
+            lista={output}
+            turnaround={turnaround}
+            velocidade={velocidade}
+            processos={processos}
+            algoritmoMemoria={algoritmoMemoria}
+            algoritmoProcessos={algoritmoProcessos} />
+           }
             </div>
             
           </div>
