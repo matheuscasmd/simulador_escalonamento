@@ -130,6 +130,7 @@ export function rr(processes_input: IProcesso[], quantum: number, preemptive: nu
 
     let average_turnaround = totalTurnaroundTime / n;
     output = orderedOutput;
+    output.shift();
     
     return { output, average_turnaround,ramHistory: memoryManager.RAMvsTempo, discoHistory: memoryManager.DISCOvsTempo,pagefaults:memoryManager.pageFaultvsTempo};
 }
